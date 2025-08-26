@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { InterviewThemeProvider } from './context/InterviewThemeContext'
+import { HomeThemeProvider } from './context/HomeThemeContext'
 import App from './App.jsx'
 import './index.css'
 
@@ -11,7 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <ThemeProvider>
         <InterviewThemeProvider>
-          <App />
+          <HomeThemeProvider>
+            <App />
+          </HomeThemeProvider>
         </InterviewThemeProvider>
       </ThemeProvider>
     </BrowserRouter>

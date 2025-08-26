@@ -5,7 +5,7 @@ export default function Layout({ children }) {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: 'var(--home-bg)', color: 'var(--home-text)' }}>
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
