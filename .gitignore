@@ -1,0 +1,56 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Environment files
+.env
+.env.*
+!env.example
+client/.env
+client/.env.*
+!client/env.example
+
+# Build outputs
+/dist/
+/build/
+/.cache/
+/.output/
+/.next/
+/.nuxt/
+/.svelte-kit/
+/coverage/
+
+# Vite
+/.vite/
+client/dist/
+client/.vite/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary files
+/tmp/
+/temp/
+*.tmp
+*.temp
+
+# Tooling
+.vercel/
+.netlify/
+storybook-static/

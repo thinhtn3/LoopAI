@@ -4,9 +4,8 @@ export default function Navigation() {
   const location = useLocation();
 
   const navItems = [
-    { path: '/', label: 'Home', icon: '🏠' },
-    { path: '/ide', label: 'IDE', icon: '💻' },
-    { path: '/interview', label: 'Interview', icon: '🎯' },
+    { path: '/', label: 'Home'},
+    { path: '/interview', label: 'Interview'},
   ];
 
   const isActive = (path) => {

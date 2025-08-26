@@ -5,11 +5,18 @@ import Chatbox from "../components/ide/Chatbox";
 import ThemeSelector from "../components/ide/ThemeSelector";
 import { useInterviewTheme } from "../context/InterviewThemeContext";
 import { useState } from "react";
+import DefaultButton from "@/components/common/DefaultButton";
+import { runPython } from "../lib/handleRun";
 
 export default function Interview() {
   const { theme } = useInterviewTheme();
   const [code, setCode] = useState("print('Hello, World!')");
   const [output, setOutput] = useState("");
+
+  const handleRunCode = async () => {
+    const result = await runPython(code);
+    setOutput(result.run.stdout);
+  };
 
   return (
     <Layout>
@@ -69,7 +76,7 @@ export default function Interview() {
               >
                 Code Editor
               </h2>
-              <RunButton code={code} setOutput={setOutput} />
+              <DefaultButton onClick={handleRunCode}>Run</DefaultButton>
             </div>
 
             {/* Code Editor */}
