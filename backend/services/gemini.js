@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
+import { instructions } from "../constants/systemInstructions.js";
 
 // Initialize client with your API key
 const key = process.env.GEMINI_API_KEY;
@@ -9,14 +10,18 @@ if (!key) {
 
 const ai = new GoogleGenAI({ apiKey: key });
 
-async function generateContent(prompt) {
+async function generateContent(prompt, codeContext, messages) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: prompt,
+    contents: [
+      { role: "user", parts: [{ text: prompt }] },
+      { role: "user", parts: [{ text: codeContext }] },
+      { role: "user", parts: [{ text: instructions }] },
+    //   { role: "user", parts: [{ text: messages }] },
+    ],
   });
 
   // Output the generated text
-  console.log(response.candidates, "Response from Gemini")
   return response.text;
 }
 

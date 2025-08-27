@@ -18,10 +18,12 @@ export default function Chatbox({ codeContext }) {
   const handleSendMessage = async () => {
     if (!userInput.trim() || isLoading) return;
     setIsLoading(true);
+
     //Prepare user message and add to messages
     const userMessage = {
       role: "user",
       content: userInput,
+      codeContext: codeContext,
     };
     setMessages((prev) => [...prev, userMessage]);
 
@@ -34,6 +36,8 @@ export default function Chatbox({ codeContext }) {
         `${import.meta.env.VITE_API_URL}/api/chat/`,
         {
           prompt: userInput,
+          codeContext: codeContext,
+          messages: messages,
         }
       );
 

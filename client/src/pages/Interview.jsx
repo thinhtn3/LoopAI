@@ -1,6 +1,5 @@
 import Layout from "../components/layout/Layout";
 import CodeEditor from "../components/ide/CodeEditor";
-import RunButton from "../components/ide/RunButton";
 import Chatbox from "../components/ide/Chatbox";
 import ThemeSelector from "../components/ide/ThemeSelector";
 import { useInterviewTheme } from "../context/InterviewThemeContext";
