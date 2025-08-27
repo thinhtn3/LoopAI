@@ -14,6 +14,7 @@ export default function Interview() {
   const [output, setOutput] = useState("");
 
   const handleRunCode = async () => {
+    //Pass in current code to helper function to compile Python and set output
     const result = await runPython(code);
     setOutput(result.run.stdout);
   };
@@ -93,23 +94,13 @@ export default function Interview() {
               borderColor: theme.colors.border,
             }}
           >
-            <div
-              className="px-4 py-3 border-b"
-              style={{
-                backgroundColor: theme.colors.chatBg,
-                borderColor: theme.colors.border,
-              }}
-            >
               <h2
                 className="text-lg font-semibold"
                 style={{ color: theme.colors.text }}
               >
-                AI Interviewer
+                Bob
               </h2>
-            </div>
-            <div className="flex-1">
-              <Chatbox />
-            </div>
+            <Chatbox codeContext={code}/>
           </div>
         </div>
       </div>
