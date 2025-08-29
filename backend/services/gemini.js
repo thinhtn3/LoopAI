@@ -10,19 +10,36 @@ if (!key) {
 
 const ai = new GoogleGenAI({ apiKey: key });
 
-async function generateContent(prompt, codeContext, messages) {
+/**
+ *
+ * @param {string} prompt
+ * @param {object[]} chatHistory
+ * @returns {object}
+ */
+async function chatResponse(prompt, chatHistory) {
+  const contents = [];
+
+  chatHistory.forEach((message) => {
+    const role = message.role;
+    const parts = [];
+    if (message.content.text) {
+      parts.push({ text: message.content.text });
+    }
+    contents.push({ role: role, parts: parts });
+  });
+
+  contents.push({ role: "user", parts: [{ text: prompt }] });
+
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: [
-      { role: "user", parts: [{ text: prompt }] },
-      { role: "user", parts: [{ text: codeContext }] },
-      { role: "user", parts: [{ text: instructions }] },
-    //   { role: "user", parts: [{ text: messages }] },
-    ],
+    contents: contents,
   });
 
   // Output the generated text
-  return response.text;
+
+  return {
+    text: response.text,
+  };
 }
 
-export { generateContent };
+export { chatResponse };

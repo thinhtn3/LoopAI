@@ -9,9 +9,11 @@ export default function Chatbox({ codeContext }) {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
+    //Scroll to bottom of chat box when new messages are added
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -35,9 +37,8 @@ export default function Chatbox({ codeContext }) {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/chat/`,
         {
-          prompt: userInput,
-          codeContext: codeContext,
-          messages: messages,
+          userMessage: userInput,
+          sessionId: sessionId,
         }
       );
 
@@ -48,6 +49,9 @@ export default function Chatbox({ codeContext }) {
           content: response.data.response,
         };
         setMessages((prev) => [...prev, modelMessage]);
+        if (!sessionId && response.data.sessionId) {
+          setSessionId(response.data.sessionId);
+        }
       } else {
         console.error("No response from API");
       }
