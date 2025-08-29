@@ -5,9 +5,6 @@ import OutputBox from "./OutputBox";
 export default function CodeEditor({ code, setCode, output }) {
 
   {/* Send code to PistonAPI to be executed */}
-
-  const getEditorCode = () => {
-  }
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="h-[60vh] w-[70vw]">
@@ -25,7 +22,6 @@ export default function CodeEditor({ code, setCode, output }) {
         />
       </div>
       <OutputBox output={output} />
-      <button onClick={getEditorCode}>Run Code</button>
     </div>
   );
 }

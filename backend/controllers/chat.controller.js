@@ -1,11 +1,10 @@
-import { chatResponse } from "../services/gemini.js";
 import { HTTP_STATUS_CODES } from "../constants/index.js";
 import prisma from "../config/database.js";
 import { v4 as uuidv4 } from "uuid";
-
+import { geminiChat } from "../services/chat.service.js";
 
 const chatController = async (req, res) => {
-  const { userMessage, sessionId } = req.body;
+  const { userMessage, sessionId, userCode } = req.body;
 
   if (!userMessage) {
     return res.status(400).json({ message: "User message is required" });
@@ -30,43 +29,13 @@ const chatController = async (req, res) => {
         where: { id: sessionId },
       });
     }
-
-    //Create a new message from user
-    await prisma.message.create({
-      data: {
-        sessionId: session.id,
-        role: "user",
-        content: {
-          text: userMessage,
-        },
-      },
-
-    });
-    const history = await prisma.message.findMany({
-      where: { sessionId: session.id },
-      orderBy: { createdAt: "desc" },
-      take: 40, //Get last 40 messages
-      select: { role: true, content: true,},
-    });
+    console.log("Session ID:", session);
+    const aiResponse = await geminiChat(session.id, userMessage, userCode);
 
 
-    //Pass prompt to gemini.js service to generate response and return to client
-    const aiResponse = await chatResponse(userMessage, history);
-
-    //Create a new message from AI
-    await prisma.message.create({
-      data: {
-        sessionId: session.id,
-        role: "model",
-        content: { text: aiResponse.text },
-      },
-    });
-
-
-
+    console.log("AI Response:", aiResponse);
     return res.status(HTTP_STATUS_CODES.SUCCESS).json({
-      response: aiResponse.text,
-      chatHistory: history,
+      response: aiResponse,
       sessionId: session.id,
     });
     

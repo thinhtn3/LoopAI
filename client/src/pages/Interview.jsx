@@ -99,7 +99,7 @@ export default function Interview() {
               >
                 Bob
               </h2>
-            <Chatbox codeContext={code}/>
+            <Chatbox code={code}/>
           </div>
         </div>
       </div>

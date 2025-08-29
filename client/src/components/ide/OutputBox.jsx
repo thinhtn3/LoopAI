@@ -2,7 +2,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function OutputBox({ output }) {
     return (
-        <div className="flex flex-col h-[20vh] w-full">
+        <div className="flex flex-col h-[20vh] w-full overflow-y-scroll">
             {/* Header */}
             <div className="bg-[#1e1e1e] border-b border-[#3c3c3c] px-4 py-2">
                 <h3 className="text-sm font-medium text-[#cccccc]">Output</h3>

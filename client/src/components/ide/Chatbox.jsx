@@ -5,15 +5,15 @@ import { useState, useRef, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import axios from "axios";
 
-export default function Chatbox({ codeContext }) {
+export default function Chatbox({ code }) {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const bottomRef = useRef(null);
 
+  //Scroll to bottom of chat box when new messages are added
   useEffect(() => {
-    //Scroll to bottom of chat box when new messages are added
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -21,11 +21,11 @@ export default function Chatbox({ codeContext }) {
     if (!userInput.trim() || isLoading) return;
     setIsLoading(true);
 
-    //Prepare user message and add to messages
+    //Prepare user message and add to messages state for display
     const userMessage = {
       role: "user",
       content: userInput,
-      codeContext: codeContext,
+      code: code,
     };
     setMessages((prev) => [...prev, userMessage]);
 
@@ -34,11 +34,13 @@ export default function Chatbox({ codeContext }) {
     setIsLoading(true);
 
     try {
+
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/chat/`,
         {
           userMessage: userInput,
           sessionId: sessionId,
+          userCode: code,
         }
       );
 
@@ -55,6 +57,7 @@ export default function Chatbox({ codeContext }) {
       } else {
         console.error("No response from API");
       }
+
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
