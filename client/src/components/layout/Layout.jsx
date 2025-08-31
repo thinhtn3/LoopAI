@@ -21,11 +21,11 @@ export default function Layout({ children }) {
         {children}
       </main>
       
-      <footer className="border-t mt-auto">
+      {/* <footer className="border-t mt-auto">
         <div className="container mx-auto px-4 py-4 text-center text-muted-foreground">
           <p>&copy; 2024 Mock AI. Built with React, Tailwind CSS, and shadcn/ui.</p>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

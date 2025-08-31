@@ -1,5 +1,0 @@
-const instructions = `
-
-`;
-
-export { instructions };

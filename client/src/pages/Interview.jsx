@@ -6,11 +6,15 @@ import { useInterviewTheme } from "../context/InterviewThemeContext";
 import { useState } from "react";
 import DefaultButton from "@/components/common/DefaultButton";
 import { runPython } from "../lib/handleRun";
+import QuestionDisplay from "../components/ide/QuestionDisplay";
+import { questionBank } from "../constants/questionBank";
+import OutputBox from "../components/ide/OutputBox";
 
 export default function Interview() {
   const { theme } = useInterviewTheme();
   const [code, setCode] = useState("print('Hello, World!')");
   const [output, setOutput] = useState("");
+  const [selectedProblem, setSelectedProblem] = useState(questionBank[0]);
 
   const handleRunCode = async () => {
     //Pass in current code to helper function to compile Python and set output
@@ -19,90 +23,71 @@ export default function Interview() {
   };
 
   return (
-    <Layout>
-      <div
-        className="min-h-screen flex flex-col"
-        style={{
-          backgroundColor: theme.colors.background,
-          color: theme.colors.text,
-        }}
-      >
-        {/* Header with Theme Selector */}
+    <div
+      className="h-screen w-screen flex flex-col overflow-hidden"
+      style={{
+        backgroundColor: theme.colors.background,
+        color: theme.colors.text,
+      }}
+    >
+      {/* Main Content */}
+      <div className="flex-1 flex min-h-0">
+        {/* Question Display Section */}
+        <div className="w-[20vw] flex flex-col border overflow-hidden">
+          <QuestionDisplay selectedProblem={selectedProblem} />
+        </div>
+
+        {/* Code Editor Section */}
         <div
-          className="border-b px-6 py-4 flex items-center justify-between"
+          className="flex-1 flex flex-col border overflow-hidden"
           style={{
             backgroundColor: theme.colors.surface,
             borderColor: theme.colors.border,
           }}
         >
-          <div>
-            <h1
-              className="text-2xl font-bold"
-              style={{ color: theme.colors.text }}
+          {/* Header */}
+          <div
+            className="px-4 py-3 border-b flex items-center justify-between flex-shrink-0"
+            style={{
+              backgroundColor: theme.colors.codeBg,
+              borderColor: theme.colors.border,
+            }}
+          >
+            <h2
+              className="text-lg font-semibold"
+              style={{ color: theme.colors.codeText }}
             >
-              Technical Interview
-            </h1>
-            <p
-              className="text-sm mt-1"
-              style={{ color: theme.colors.textSecondary }}
-            >
-              Practice coding problems with AI assistance
-            </p>
+              Code Editor
+            </h2>
+            <DefaultButton onClick={handleRunCode}>Run</DefaultButton>
           </div>
-          <ThemeSelector />
+
+          {/* Code Editor */}
+          <div className="flex flex-col h-full">
+            <CodeEditor code={code} setCode={setCode} output={output} />
+            <OutputBox output={output} />
+          </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 flex p-6 space-x-6">
-          {/* Code Editor Section */}
-          <div
-            className="flex-1 flex flex-col rounded-lg border overflow-hidden"
-            style={{
-              backgroundColor: theme.colors.surface,
-              borderColor: theme.colors.border,
-            }}
+        {/* Chat Section */}
+        <div
+          className="w-[20vw] flex flex-col border overflow-hidden"
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+          }}
+        >
+          <h2
+            className="px-4 py-3 border-b flex-shrink-0 text-lg font-semibold"
+            style={{ color: theme.colors.text }}
           >
-            {/* Header */}
-            <div
-              className="px-4 py-3 border-b flex items-center justify-between"
-              style={{
-                backgroundColor: theme.colors.codeBg,
-                borderColor: theme.colors.border,
-              }}
-            >
-              <h2
-                className="text-lg font-semibold"
-                style={{ color: theme.colors.codeText }}
-              >
-                Code Editor
-              </h2>
-              <DefaultButton onClick={handleRunCode}>Run</DefaultButton>
-            </div>
-
-            {/* Code Editor */}
-            <div className="flex-1">
-              <CodeEditor code={code} setCode={setCode} output={output} />
-            </div>
-          </div>
-
-          {/* Chat Section */}
-          <div
-            className="w-96 flex flex-col rounded-lg border overflow-hidden"
-            style={{
-              backgroundColor: theme.colors.surface,
-              borderColor: theme.colors.border,
-            }}
-          >
-              <h2
-                className="text-lg font-semibold"
-                style={{ color: theme.colors.text }}
-              >
-                Bob
-              </h2>
-            <Chatbox code={code}/>
+            Bob
+          </h2>
+          <div className="flex-1 min-h-0">
+            <Chatbox code={code} />
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }

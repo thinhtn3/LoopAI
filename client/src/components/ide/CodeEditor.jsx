@@ -6,8 +6,8 @@ export default function CodeEditor({ code, setCode, output }) {
 
   {/* Send code to PistonAPI to be executed */}
   return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="h-[60vh] w-[70vw]">
+    <div className="flex flex-col h-[75%]">
+      <div className="flex-1 min-h-0">
         <Editor
           height="100%"
           language="python"
@@ -21,7 +21,6 @@ export default function CodeEditor({ code, setCode, output }) {
           }}
         />
       </div>
-      <OutputBox output={output} />
     </div>
   );
 }

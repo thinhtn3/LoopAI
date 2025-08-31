@@ -1,6 +1,5 @@
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
-import { instructions } from "../constants/systemInstructions.js";
 
 // Initialize client with your API key
 const key = process.env.GEMINI_API_KEY;

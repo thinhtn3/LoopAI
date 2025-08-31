@@ -66,7 +66,7 @@ export default function Chatbox({ code }) {
   };
 
   return (
-    <div className="w-full max-w-md h-[70vh] border rounded-md flex flex-col">
+    <div className="w-full h-full flex flex-col">
       {/* Chat history */}
       <ScrollArea className="flex-1 min-h-0">
         <div className="h-full w-full px-3 py-3 space-y-3">
@@ -82,7 +82,7 @@ export default function Chatbox({ code }) {
       </ScrollArea>
 
       {/* User chat input */}
-      <div className="border-t p-3 flex gap-2">
+      <div className="border-t p-3 flex gap-2 flex-shrink-0">
         <Textarea
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
