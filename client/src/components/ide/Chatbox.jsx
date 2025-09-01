@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import axios from "axios";
 
-export default function Chatbox({ code }) {
+export default function Chatbox({ code, question }) {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +41,7 @@ export default function Chatbox({ code }) {
           userMessage: userInput,
           sessionId: sessionId,
           userCode: code,
+          question: question,
         }
       );
 

@@ -9,7 +9,7 @@ export const geminiChat = async (sessionId, userMessage, userCode) => {
   }
 
   const response = await chainWithMemory.invoke(
-    { input: userMessage, code: userCode },
+    { input: userMessage, code: userCode, question },
     { configurable: { sessionId } }
   );
 

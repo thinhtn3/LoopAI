@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { geminiChat } from "../services/chat.service.js";
 
 const chatController = async (req, res) => {
-  const { userMessage, sessionId, userCode } = req.body;
+  const { userMessage, sessionId, userCode, question } = req.body;
 
   if (!userMessage) {
     return res.status(400).json({ message: "User message is required" });
@@ -30,7 +30,7 @@ const chatController = async (req, res) => {
       });
     }
     console.log("Session ID:", session);
-    const aiResponse = await geminiChat(session.id, userMessage, userCode);
+    const aiResponse = await geminiChat(session.id, userMessage, userCode, question);
 
 
     console.log("AI Response:", aiResponse);

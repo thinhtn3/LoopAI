@@ -3,15 +3,16 @@ import express from "express";
 import cors from "cors";
 import errorHandler from "./middleware/errorHandler.js";
 import chatRoutes from "./routes/chat.route.js";
+import searchRoutes from "./routes/search.route.js";
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json())
 
-//Test Route
 
 //Routes
 app.use("/api/chat", chatRoutes);
+app.use("/search", searchRoutes);
 
 app.use(errorHandler);
 
