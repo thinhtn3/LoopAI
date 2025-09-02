@@ -22,3 +22,30 @@ model Message {
   content   Json
   createdAt DateTime @default(now())
 }
+
+/*** New models for Leetcode***/
+model Problem {
+  slug        String   @id              // leetcode titleSlug
+  title       String
+  url         String
+  difficulty  Difficulty
+  frontendId  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  
+  tags        Tag[]                     // Many-to-many relationship
+  @@index([title]) // basic btree index (use pg_trgm below for fuzzy/substring)
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())   //primary key
+  name      String    @unique                         //human key
+  problems  Problem[]
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
