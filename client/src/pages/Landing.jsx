@@ -1,17 +1,15 @@
 import Hero from "@/components/landing/Hero";
-import Layout from "@/components/layout/Layout";
+import Navbar from "@/components/common/Navbar";
 import FeaturesGrid from '@/components/landing/FeaturesGrid';
 // import HowItWorks from '@/components/home/HowItWorks';
 import FooterCta from "@/components/landing/FooterCta";
 
 export default function Landing() {
   return (
-    <div className="w-screen">
-      <Layout>
+    <div className="w-screen h-screen">
+        <Navbar />
         <Hero />
         <FeaturesGrid />
-        <FooterCta />
-      </Layout>
     </div>
   );
 }

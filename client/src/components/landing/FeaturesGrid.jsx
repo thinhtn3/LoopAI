@@ -1,8 +1,10 @@
 import FeatureCard from "./FeatureCard";
+import { useHomeTheme } from "@/context/HomeThemeContext";
 
 export default function FeaturesGrid() {
+  const { theme } = useHomeTheme();
   return (
-    <section className="w-full px-6 py-16" style={{ backgroundColor: 'var(--home-bg)', color: 'var(--home-text)' }}>
+    <section className="w-full h-[50%] px-6 py-16" style={{ backgroundColor: theme.colors.bg, color: theme.colors.text }}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <FeatureCard
           title="VS Code-like IDE"

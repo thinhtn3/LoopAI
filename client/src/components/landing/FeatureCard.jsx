@@ -15,7 +15,7 @@ export default function FeatureCard({ title, description, icon, width, height })
       style={{
         backgroundColor: theme.colors.surface,
         color: theme.colors.text,
-        border: `1px solid ${theme.colors.glowBlue}`,
+        border: `1px solid ${theme.colors.border}`,
         width: width || "100%",
         height: height || "100%",
         paddingX: "4rem",

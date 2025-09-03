@@ -1,30 +1,28 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-const HomeThemeContext = createContext();
+const HomeThemeContext = createContext(null);
 
-export const useHomeTheme = () => {
-  const ctx = useContext(HomeThemeContext);
-  if (!ctx) throw new Error('useHomeTheme must be used within HomeThemeProvider');
-  return ctx;
-};
-
-const homeTheme = {
-  name: 'Home VS Dark',
+const defaultTheme = {
+  name: "Home VS Dark",
   colors: {
-    bg: '#1e1e1e',
-    surface: '#252526',
-    border: '#3c3c3c',
-    text: '#d4d4d4',
-    muted: '#969696',
-    accent: '#007acc',
-    accentText: '#111827',
-    glowBlue: 'rgba(0,122,204,0.15)',
-    glowGreen: 'rgba(106,153,85,0.12)'
-  }
+    bg: "#0d0d0d",        // overall page background (almost black, but softer)
+    surface: "#161616",   // card / panel background
+    border: "#262626",    // subtle borders around cards & nav
+    text: "#f5f5f5",      // main text (soft white)
+    muted: "#a3a3a3",     // secondary text (descriptions, labels)
+    accent: "#22c55e",    // lime-500 (your green highlight for buttons/links)
+    accentText: "#0d0d0d",// text when placed on accent background
+  },
 };
 
-export const HomeThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(homeTheme);
+export function useHomeTheme() {
+  const ctx = useContext(HomeThemeContext);
+  if (!ctx) throw new Error("useHomeTheme must be used within HomeThemeProvider");
+  return ctx;
+}
+
+export function HomeThemeProvider({ children, initialTheme }) {
+  const [theme, setTheme] = useState(initialTheme || defaultTheme);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -33,9 +31,6 @@ export const HomeThemeProvider = ({ children }) => {
     });
   }, [theme]);
 
-  return (
-    <HomeThemeContext.Provider value={{ theme, setTheme }}>
-      {children}
-    </HomeThemeContext.Provider>
-  );
-};
+  const value = useMemo(() => ({ theme, setTheme }), [theme]);
+  return <HomeThemeContext.Provider value={value}>{children}</HomeThemeContext.Provider>;
+}
