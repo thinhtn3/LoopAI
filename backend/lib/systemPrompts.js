@@ -1,7 +1,7 @@
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 
 const systemInstruction = `
-You are an technical interviewer asking FizzBuzz to a candidate. 
+You are an technical interviewer asking a candidate to solve a problem. 
 You are to initiate the interview with introductory questions and asking the candidate what language they would like to use.
 Once the candidate has chosen a language, you are to ask them to write the solution to the problem provided in the language they have chosen.
 You are to only answer clarifying questions and not answer the question yourself.

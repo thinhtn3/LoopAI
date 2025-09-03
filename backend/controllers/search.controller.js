@@ -5,9 +5,16 @@ import { searchByKeyword } from "../services/search.service.js";
 
 
 export const searchKeywordController = async (req, res) => {
+    //validate
     const { keyword } = req.query;
-    console.log("Searching for keyword:", keyword);
-    const problems = await searchByKeyword(keyword.toLowerCase().trim());
+    if (!keyword) {
+        return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: "Keyword is required" });
+    }
+    //clean
+    const cleanedKeyword = keyword.toLowerCase().trim();
+    //call service
+    const problems = await searchByKeyword(cleanedKeyword);
+    //return response
     return res.status(HTTP_STATUS_CODES.SUCCESS).json({ problems });
 };
 

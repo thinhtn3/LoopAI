@@ -3,18 +3,36 @@ import CodeEditor from "../components/ide/CodeEditor";
 import Chatbox from "../components/ide/Chatbox";
 import ThemeSelector from "../components/ide/ThemeSelector";
 import { useInterviewTheme } from "../context/InterviewThemeContext";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import DefaultButton from "@/components/common/DefaultButton";
 import { runPython } from "../lib/handleRun";
 import QuestionDisplay from "../components/ide/QuestionDisplay";
-import { questionBank } from "../constants/questionBank";
 import OutputBox from "../components/ide/OutputBox";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
+
 
 export default function Interview() {
   const { theme } = useInterviewTheme();
   const [code, setCode] = useState("print('Hello, World!')");
   const [output, setOutput] = useState("");
-  const [selectedProblem, setSelectedProblem] = useState(questionBank[0]); // Default question, object from questionBank
+  const [selectedProblem, setSelectedProblem] = useState(null); // Default question, object from questionBank
+  const [searchParams, setSearchParams] = useSearchParams();
+  const slug = searchParams.get("slug");
+  const ranRef = useRef(false);
+
+  const fetchQuestion = async () => {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${slug}`);
+    setSelectedProblem(response.data.question);
+    console.log("fetched question");
+  };
+
+  useEffect(() => {
+    if(ranRef.current) return;
+    ranRef.current = true;
+    fetchQuestion();
+  }, []);
+
 
   const handleRunCode = async () => {
     //Pass in current code to helper function to compile Python and set output
@@ -30,64 +48,76 @@ export default function Interview() {
         color: theme.colors.text,
       }}
     >
-        {/* Main Content */}
-        <div className="flex-1 flex min-h-0">
-          {/* Question Display Section */}
-          <div className="w-[20vw] flex flex-col border overflow-hidden">
+      {/* Main Content */}
+      <div className="flex-1 flex min-h-0">
+        {/* Question Display Section */}
+        <div className="w-[20vw] flex flex-col border overflow-hidden">
+          {selectedProblem ? (
             <QuestionDisplay selectedProblem={selectedProblem} />
-          </div>
-
-          {/* Code Editor Section */}
-          <div
-            className="flex-1 flex flex-col border overflow-hidden"
-            style={{
-              backgroundColor: theme.colors.surface,
-              borderColor: theme.colors.border,
-            }}
-          >
-            {/* Header */}
-            <div
-              className="px-4 py-3 border-b flex items-center justify-between flex-shrink-0"
-              style={{
-                backgroundColor: theme.colors.codeBg,
-                borderColor: theme.colors.border,
-              }}
-            >
-              <h2
-                className="text-lg font-semibold"
-                style={{ color: theme.colors.codeText }}
-              >
-                Code Editor
-              </h2>
-              <DefaultButton onClick={handleRunCode}>Run</DefaultButton>
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-sm text-muted-foreground">Loading question...</p>
             </div>
+          )}
+        </div>
 
-            {/* Code Editor */}
-            <div className="flex flex-col h-full">
-              <CodeEditor code={code} setCode={setCode} output={output} />
-              <OutputBox output={output} />
-            </div>
-          </div>
-
-          {/* Chat Section */}
+        {/* Code Editor Section */}
+        <div
+          className="flex-1 flex flex-col border overflow-hidden"
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+          }}
+        >
+          {/* Header */}
           <div
-            className="w-[20vw] flex flex-col border overflow-hidden"
+            className="px-4 py-3 border-b flex items-center justify-between flex-shrink-0"
             style={{
-              backgroundColor: theme.colors.surface,
+              backgroundColor: theme.colors.codeBg,
               borderColor: theme.colors.border,
             }}
           >
             <h2
-              className="px-4 py-3 border-b flex-shrink-0 text-lg font-semibold"
-              style={{ color: theme.colors.text }}
+              className="text-lg font-semibold"
+              style={{ color: theme.colors.codeText }}
             >
-              Bob
+              Code Editor
             </h2>
-            <div className="flex-1 min-h-0">
-              <Chatbox code={code} question={selectedProblem}/>
-            </div>
+            <DefaultButton onClick={handleRunCode}>Run</DefaultButton>
+          </div>
+
+          {/* Code Editor */}
+          <div className="flex flex-col h-full">
+            <CodeEditor code={code} setCode={setCode} output={output} />
+            <OutputBox output={output} />
           </div>
         </div>
+
+        {/* Chat Section */}
+        <div
+          className="w-[20vw] flex flex-col border overflow-hidden"
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+          }}
+        >
+          <h2
+            className="px-4 py-3 border-b flex-shrink-0 text-lg font-semibold"
+            style={{ color: theme.colors.text }}
+          >
+            Bob
+          </h2>
+          <div className="flex-1 min-h-0">
+            {selectedProblem ? (
+            <Chatbox code={code} question={selectedProblem} />
+            ) : (
+              <div className="flex-1 flex items-center justify-center">
+                <p className="text-sm text-muted-foreground">Loading question...</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

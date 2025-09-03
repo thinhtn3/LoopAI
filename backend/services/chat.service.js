@@ -1,6 +1,6 @@
 import chainWithMemory from "../lib/chain.js";
 
-export const geminiChat = async (sessionId, userMessage, userCode) => {
+export const geminiChat = async (sessionId, userMessage, userCode, question) => {
   if (!userMessage || !userMessage.trim()) {
     throw new Error("User message is required");
   }

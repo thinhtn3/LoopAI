@@ -5,6 +5,7 @@ import { geminiChat } from "../services/chat.service.js";
 
 const chatController = async (req, res) => {
   const { userMessage, sessionId, userCode, question } = req.body;
+  console.log("Question:", question);
 
   if (!userMessage) {
     return res.status(400).json({ message: "User message is required" });

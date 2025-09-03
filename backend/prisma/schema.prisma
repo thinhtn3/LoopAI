@@ -32,8 +32,6 @@ model Problem {
   frontendId  String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  
   tags        Tag[]                     // Many-to-many relationship
   @@index([title]) // basic btree index (use pg_trgm below for fuzzy/substring)
 }

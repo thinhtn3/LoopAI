@@ -31,47 +31,33 @@ export default function QuestionDisplay({ selectedProblem }) {
           </div>
         </div>
       </div>
-      
-      <ScrollArea className="flex-1 min-h-0 p-4">
-        <div className="space-y-4">
-          <div>
-            <h4 className="font-medium mb-2">Description</h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {selectedProblem.description}
-            </p>
-          </div>
 
-          <div>
-            <h4 className="font-medium mb-2">Examples</h4>
-            <div className="space-y-3">
-              {selectedProblem.examples.map((example, index) => (
-                <Card key={index} className="p-3 bg-muted/50">
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="font-medium">Input: </span>
-                      <code className="font-mono text-xs bg-background px-1 py-0.5 rounded">
-                        {example.input}
-                      </code>
-                    </div>
-                    <div>
-                      <span className="font-medium">Output: </span>
-                      <code className="font-mono text-xs bg-background px-1 py-0.5 rounded">
-                        {example.output}
-                      </code>
-                    </div>
-                    {example.explanation && (
-                      <div>
-                        <span className="font-medium">Explanation: </span>
-                        <span className="text-muted-foreground">
-                          {example.explanation}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </Card>
+      <ScrollArea className="flex-1 min-h-0 p-4">
+        <div>
+          <p>{selectedProblem.description}</p>
+          {/* Examples */}
+          
+          {selectedProblem.examples && (
+            <div>
+              <h4 className="font-semibold mb-2">Examples</h4>
+              {selectedProblem.examples.map((ex, idx) => (
+                <div
+                  key={idx}
+                  className="mb-3 p-2 border rounded bg-muted/30 text-sm"
+                >
+                  <p>
+                    <strong>Input:</strong> {JSON.stringify(ex.input, null, 2)}
+                  </p>
+                  <p>
+                    <strong>Output:</strong> {JSON.stringify(ex.output)}
+                  </p>
+                  <p>
+                    <strong>Explanation:</strong> {ex.explanation}
+                  </p>
+                </div>
               ))}
             </div>
-          </div>
+          )}
         </div>
       </ScrollArea>
     </div>

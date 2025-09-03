@@ -11,6 +11,9 @@ export default function Chatbox({ code, question }) {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const bottomRef = useRef(null);
+  // useEffect(() => {
+  //   console.log(question);
+  // }, [question]);
 
   //Scroll to bottom of chat box when new messages are added
   useEffect(() => {
@@ -32,7 +35,6 @@ export default function Chatbox({ code, question }) {
     //Send message to /api/chat endpoint (post request)
     setUserInput("");
     setIsLoading(true);
-
     try {
 
       const response = await axios.post(

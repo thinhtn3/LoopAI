@@ -84,7 +84,6 @@ const uploadFirstPage = async () => {
             },
         });
     }
-    console.log("Uploaded first page");
 }
 
 const p = async () => {
@@ -97,5 +96,3 @@ const p = async () => {
 const rows = await prisma.problem.findMany({
     where: { tags: { some: { name: { in: ['Dynamic Programming'] } } } },
   });
-
-console.log(rows);
