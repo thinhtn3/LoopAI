@@ -1,10 +1,15 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "@fontsource-variable/geist-sans";
+@import "@fontsource-variable/geist-mono";
+
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-sans: "Geist Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
 
@@ -50,6 +55,11 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+html {
+  font-family: var(--font-sans);
+}
+code, pre, kbd, samp, .font-mono { font-family: var(--font-mono); }
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -60,6 +70,7 @@ a:hover {
 }
 
 body {
+  font-family: var(--font-sans);
   margin: 0;
   display: flex;
   place-items: center;
@@ -79,7 +90,6 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }

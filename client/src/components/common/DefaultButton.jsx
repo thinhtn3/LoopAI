@@ -3,17 +3,17 @@ import { cn } from "@/lib/utils";
 import { useInterviewTheme } from "@/context/InterviewThemeContext";
 
 export default function DefaultButton({
-  children, //content
-  onClick, //function
-  bg = "var(--vs-dark-inspired-surface)",
-  text = "var(--interview-text)",
-  border = "var(--interview-border)",
-  size = "default", //sm, lg, icon
+  children,
+  onClick,
+  bg, // optional override
+  text, // optional override
+  border, // optional override
+  size = "default",
   className,
   disabled = false,
   loading = false,
-  type = "button", //submit, reset, button
-  
+  type = "button",
+  asChild = false,
   ...props
 }) {
   const { theme } = useInterviewTheme();
@@ -26,9 +26,10 @@ export default function DefaultButton({
 
   return (
     <Button
+      asChild={asChild}
       size={size}
       className={cn(
-        "transition-all duration-200",
+        // "transition-colors duration-150",
         loading && "opacity-70 cursor-not-allowed",
         disabled && "opacity-50 cursor-not-allowed",
         className
@@ -36,10 +37,6 @@ export default function DefaultButton({
       onClick={handleClick}
       disabled={disabled || loading}
       type={type}
-      style={{
-        backgroundColor: theme.colors.accent,
-        color: theme.colors.accentText,
-      }}
       {...props}
     >
       {loading ? (

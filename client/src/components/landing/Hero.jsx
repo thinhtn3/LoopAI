@@ -15,10 +15,9 @@ export default function Hero() {
         marginLeft: "calc(50% - 50vw)",
       }}
     >
-
       <div className="relative w-full px-6 pt-24 pb-16">
         <div className="w-full max-w-none">
-          <span
+          {/* <span
             className="inline-block text-xs tracking-wider uppercase px-2 py-1 rounded border"
             style={{
               borderColor: theme.colors.border,
@@ -26,14 +25,19 @@ export default function Hero() {
             }}
           >
             Mock Technical Interviews
-          </span>
+          </span> */}
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-8">
+            {/* <Zap className="w-4 h-4 mr-2" /> */}
+            MOCK TECHNICAL INTERVIEWS
+          </div>
 
           <BoxReveal boxColor={theme.colors.accent} duration={0.4}>
             <h1
               className="mt-4 text-4xl md:text-6xl font-extrabold leading-tight"
               style={{ color: theme.colors.text }}
             >
-              Practice like it’s the <span style={{ color: theme.colors.accent }}>real interview</span>
+              Practice like it’s the{" "}
+              <span style={{ color: theme.colors.accent }}>real interview</span>
             </h1>
           </BoxReveal>
 
@@ -50,13 +54,11 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <DefaultButton
               asChild //passes parent styling to child which is Link
-              className="w-1/7 text-left"
-              style={{
-                backgroundColor: theme.colors.accent,
-                color: theme.colors.accentText,
-              }}
+              className="w-1/7 text-left  bg-[var(--home-accent)] text-[var(--home-accentText)] border border-[var(--home-border)] transition-all duration-150 hover:bg-[var(--home-accentHover)] hover:w-1/6"
             >
-              <Link to="/interview">Start a mock interview</Link>
+              <Link style={{ color: theme.colors.accentText }} to="/home">
+                Start a mock interview
+              </Link>
             </DefaultButton>
           </div>
         </div>

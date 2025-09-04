@@ -10,10 +10,40 @@ const defaultTheme = {
     border: "#262626",    // subtle borders around cards & nav
     text: "#f5f5f5",      // main text (soft white)
     muted: "#a3a3a3",     // secondary text (descriptions, labels)
-    accent: "#22c55e",    // lime-500 (your green highlight for buttons/links)
+    // accent: "#22c55e",    // lime-500 (your green highlight for buttons/links)
+    accent: "#10b981",    // emerald-500 (primary CTA, highlights)
+    accentHover: "#059669", // emerald-600 (hover states)
+    accentAlt: "#34d399", // emerald-400 (logo, highlighted text, icons)
+    accentText: "#0d0d0d",// text on top of accent bg (dark)
     accentText: "#0d0d0d",// text when placed on accent background
   },
 };
+
+// const defaultTheme = {
+//   name: "Home VS Dark",
+//   colors: {
+//     // Backgrounds
+//     bg: "#000000",        // black (main background)
+//     surface: "#111827",   // gray-900 (card / panel background)
+//     border: "#1f2937",    // gray-800 (subtle borders)
+    
+//     // Text
+//     text: "#ffffff",      // white (primary text/headings)
+//     muted: "#9ca3af",     // gray-400 (secondary/muted text)
+//     body: "#d1d5db",      // gray-300 (body text) <-- optional if you want separate
+
+//     // Accents (emerald scale)
+//     accent: "#10b981",    // emerald-500 (primary CTA, highlights)
+//     accentHover: "#059669", // emerald-600 (hover states)
+//     accentAlt: "#34d399", // emerald-400 (logo, highlighted text, icons)
+//     accentText: "#0d0d0d",// text on top of accent bg (dark)
+
+//     // Extra UI / supporting
+//     section: "#030712",   // gray-950 (deep section backgrounds)
+//     borderHover: "#374151"// gray-700 (hover borders)
+//   },
+// };
+
 
 export function useHomeTheme() {
   const ctx = useContext(HomeThemeContext);

@@ -26,7 +26,7 @@ export default function FeatureCard({ title, description, icon, width, height })
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p>{description}</p>
+        <p style={{ color: theme.colors.muted }}>{description}</p>
       </CardContent>
     </Card>
   );

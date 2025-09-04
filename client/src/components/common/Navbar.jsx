@@ -18,15 +18,17 @@ export default function Navbar() {
 
   return (
     <header
-      className="border-b"
       style={{
         backgroundColor: theme.colors.surface,
-        color: theme.colors.accent,
+        borderBottom: `1px solid ${theme.colors.border}`,
+        color: theme.colors.accentAlt,
+        fontSize: "10px",
+        width: "100%",
       }}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Mock AI</h1>
+          <h1 className="font-bold">LoopAI</h1>
           <nav className="flex items-center gap-2">
             {links.map((l) => (
               <NavLink
@@ -36,6 +38,7 @@ export default function Navbar() {
                 end={l.to === "/"}
                 style={{
                   color: theme.colors.text,
+                  fontSize: "16px",
                 }}
               >
                 {l.label}
