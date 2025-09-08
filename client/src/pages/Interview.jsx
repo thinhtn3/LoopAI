@@ -2,18 +2,20 @@ import Layout from "../components/layout/Layout";
 import CodeEditor from "../components/ide/CodeEditor";
 import Chatbox from "../components/ide/Chatbox";
 import ThemeSelector from "../components/ide/ThemeSelector";
-import { useInterviewTheme } from "../context/InterviewThemeContext";
+import { useHomeTheme } from "@/context/HomeThemeContext";
 import { useState, useEffect, useRef } from "react";
 import DefaultButton from "@/components/common/DefaultButton";
 import { runPython } from "../lib/handleRun";
 import QuestionDisplay from "../components/ide/QuestionDisplay";
 import OutputBox from "../components/ide/OutputBox";
 import { useSearchParams } from "react-router-dom";
+import Navbar from "@/components/common/Navbar";
+import { Play } from "lucide-react";
+
 import axios from "axios";
 
-
 export default function Interview() {
-  const { theme } = useInterviewTheme();
+  const { theme } = useHomeTheme();
   const [code, setCode] = useState("print('Hello, World!')");
   const [output, setOutput] = useState("");
   const [selectedProblem, setSelectedProblem] = useState(null); // Default question, object from questionBank
@@ -22,17 +24,18 @@ export default function Interview() {
   const ranRef = useRef(false);
 
   const fetchQuestion = async () => {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${slug}`);
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${slug}`
+    );
     setSelectedProblem(response.data.question);
     console.log("fetched question");
   };
 
   useEffect(() => {
-    if(ranRef.current) return;
+    if (ranRef.current) return;
     ranRef.current = true;
     fetchQuestion();
   }, []);
-
 
   const handleRunCode = async () => {
     //Pass in current code to helper function to compile Python and set output
@@ -48,22 +51,25 @@ export default function Interview() {
         color: theme.colors.text,
       }}
     >
+      <Navbar />
       {/* Main Content */}
       <div className="flex-1 flex min-h-0">
         {/* Question Display Section */}
-        <div className="w-[20vw] flex flex-col border overflow-hidden">
+        <div className="w-[20vw] flex flex-col  border-0 overflow-hidden bg-[var(--home-surface)]">
           {selectedProblem ? (
             <QuestionDisplay selectedProblem={selectedProblem} />
           ) : (
             <div className="flex-1 flex items-center justify-center">
-              <p className="text-sm text-muted-foreground">Loading question...</p>
+              <p className="text-sm text-muted-foreground">
+                Loading question...
+              </p>
             </div>
           )}
         </div>
 
         {/* Code Editor Section */}
         <div
-          className="flex-1 flex flex-col border overflow-hidden"
+          className="flex-1 flex flex-col border-yellow-900 overflow-hidden"
           style={{
             backgroundColor: theme.colors.surface,
             borderColor: theme.colors.border,
@@ -83,7 +89,7 @@ export default function Interview() {
             >
               Code Editor
             </h2>
-            <DefaultButton onClick={handleRunCode}>Run</DefaultButton>
+            <DefaultButton onClick={handleRunCode} className="bg-[var(--home-accent)] text-[var(--home-accentText)] w-1/16 hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg xl:w-1/12 2xl:w-1/16"><Play /> Run</DefaultButton>
           </div>
 
           {/* Code Editor */}
@@ -95,24 +101,21 @@ export default function Interview() {
 
         {/* Chat Section */}
         <div
-          className="w-[20vw] flex flex-col border overflow-hidden"
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderColor: theme.colors.border,
-          }}
+          className="w-[20vw] flex flex-col border-0 overflow-hidden bg-[var(--home-surface)]"
         >
           <h2
-            className="px-4 py-3 border-b flex-shrink-0 text-lg font-semibold"
+            className="px-4 py-3 border-b flex-shrink-0 text-lg font-semibold border-1 border-[var(--home-border)]"
             style={{ color: theme.colors.text }}
-          >
-            Bob
+          >AI Assistant
           </h2>
           <div className="flex-1 min-h-0">
             {selectedProblem ? (
-            <Chatbox code={code} question={selectedProblem} />
+              <Chatbox code={code} question={selectedProblem} />
             ) : (
               <div className="flex-1 flex items-center justify-center">
-                <p className="text-sm text-muted-foreground">Loading question...</p>
+                <p className="text-sm text-muted-foreground">
+                  Loading question...
+                </p>
               </div>
             )}
           </div>

@@ -54,7 +54,7 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <DefaultButton
               asChild //passes parent styling to child which is Link
-              className="w-1/7 text-left  bg-[var(--home-accent)] text-[var(--home-accentText)] border border-[var(--home-border)] transition-all duration-150 hover:bg-[var(--home-accentHover)] hover:w-1/6"
+              className="w-1/7 h-10.5 text-left text-md font-medium bg-[var(--home-accent)] text-[var(--home-accentText)] border border-[var(--home-border)] transition-all duration-150 hover:bg-[var(--home-accentHover)] hover:w-1/6"
             >
               <Link style={{ color: theme.colors.accentText }} to="/home">
                 Start a mock interview

@@ -15,7 +15,8 @@ const defaultTheme = {
     accentHover: "#059669", // emerald-600 (hover states)
     accentAlt: "#34d399", // emerald-400 (logo, highlighted text, icons)
     accentText: "#0d0d0d",// text on top of accent bg (dark)
-    accentText: "#0d0d0d",// text when placed on accent background
+    chatUser: "#0d0d0d",
+    chatAI: "#10b981",
   },
 };
 

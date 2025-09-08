@@ -4,17 +4,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState, useRef, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import axios from "axios";
+import DefaultButton from "@/components/common/DefaultButton";
+import { useHomeTheme } from "@/context/HomeThemeContext";
 
 export default function Chatbox({ code, question }) {
   const [userInput, setUserInput] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(["Type here to start a conversation with LoopAI!"]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
+  const { theme } = useHomeTheme();
   const bottomRef = useRef(null);
   // useEffect(() => {
   //   console.log(question);
   // }, [question]);
 
+  
   //Scroll to bottom of chat box when new messages are added
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,7 +51,7 @@ export default function Chatbox({ code, question }) {
         }
       );
 
-      //If response is successful, prepare model response and add to messages
+      //If response is successful, prepare model response and add to messages state for display
       if (response.status === 200) {
         const modelMessage = {
           role: "model",
@@ -71,7 +75,7 @@ export default function Chatbox({ code, question }) {
   return (
     <div className="w-full h-full flex flex-col">
       {/* Chat history */}
-      <ScrollArea className="flex-1 min-h-0">
+      <ScrollArea className="flex-1 min-h-0 bg-[var(--home-surface)]">
         <div className="h-full w-full px-3 py-3 space-y-3">
           {messages.map((message, index) => (
             <ChatBubble
@@ -85,16 +89,16 @@ export default function Chatbox({ code, question }) {
       </ScrollArea>
 
       {/* User chat input */}
-      <div className="border-t p-3 flex gap-2 flex-shrink-0">
+      <div className="border-t border-[var(--home-border)] p-3 flex gap-2 flex-shrink-0 bg-[var(--home-surface)]">
         <Textarea
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           placeholder="Type a message..."
-          className="resize-none h-12 max-h-28 flex-1 overflow-auto"
+          className="resize-none h-12 max-h-28 flex-1 overflow-auto bg-[var(--home-bg)] border-1 border-[var(--home-border)]"
         />
-        <Button onClick={handleSendMessage} className="shrink-0">
+        <DefaultButton className="bg-[var(--home-accent)] text-[var(--home-accentText)]" onClick={handleSendMessage}>
           Send
-        </Button>
+        </DefaultButton>
       </div>
     </div>
   );

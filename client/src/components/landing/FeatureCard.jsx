@@ -22,7 +22,10 @@ export default function FeatureCard({ title, description, icon, width, height })
         paddingY: "4rem",
       }}
     >
-      <CardHeader>
+      <CardHeader className="flex items-center">
+        <div className="w-8 text-[var(--home-accent)]">
+          {icon}
+        </div>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>

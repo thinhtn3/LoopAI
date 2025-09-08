@@ -3,6 +3,7 @@ import Landing from './pages/Landing';
 import Interview from './pages/Interview';
 import Home from './pages/Home';
 import { HomeThemeProvider } from './context/HomeThemeContext';
+// import '@fontsource/geist-sans';
 
 export default function App() {
   return (

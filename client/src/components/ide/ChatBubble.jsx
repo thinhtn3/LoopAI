@@ -1,18 +1,18 @@
 import React from "react";
-import { useInterviewTheme } from "../../context/InterviewThemeContext.jsx";
+import { useHomeTheme } from "../../context/HomeThemeContext";
 
 // Basic chat bubble component for Interview theme
 // role: "user" | "assistant"
 // props: { role, content, timestamp }
 export default function ChatBubble({ role, content, timestamp }) {
   const isUser = role === "user";
-  const { theme } = useInterviewTheme();
+  const { theme } = useHomeTheme();
 
   const bubbleStyle = {
-    backgroundColor: isUser ? theme.colors.chatUser : theme.colors.chatAI,
+    backgroundColor: isUser ? theme.colors.bg : theme.colors.bg,
     color: isUser ? "#ffffff" : theme.colors.codeText,
-    borderColor: isUser ? theme.colors.chatUser : theme.colors.border,
-    boxShadow: theme.shadows.sm,
+    borderColor: isUser ? theme.colors.border : theme.colors.border,
+    // boxShadow: theme.shadows.sm,
   };
 
   const timeStyle = {

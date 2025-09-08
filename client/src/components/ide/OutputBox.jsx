@@ -1,16 +1,17 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import { useHomeTheme } from "@/context/HomeThemeContext";
 export default function OutputBox({ output }) {
+  const { theme } = useHomeTheme();
   return (
     <div className="flex flex-col h-[25%] w-full overflow-y-scroll">
       {/* Header */}
 
       {/* Output Content */}
-      <ScrollArea className="flex-1 bg-[#1e1e1e] border border-[#3c3c3c] rounded-b-md p-2">
-        <h3 className="text-sm font-medium text-[#cccccc]">Output</h3>
-        <div className="p-4">
+      <ScrollArea className="flex-1 rounded-b-md p-2 border-1 border-[var(--home-border)]">
+        <h3 className="xl:text-sm 2xl:text-lg font-medium text-[var(--home-muted)]">Output</h3>
+        <div className="py-2">
           {output && (
-            <pre className="text-sm font-mono text-[#d4d4d4] whitespace-pre-wrap leading-relaxed">
+            <pre className="xl:text-sm 2xl:text-lg font-mono text-[var(--home-text)] whitespace-pre-wrap leading-relaxed">
               {output}{" "}
             </pre>
           )}

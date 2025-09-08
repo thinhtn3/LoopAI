@@ -2,15 +2,21 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { getDifficultyColor } from "@/constants/difficultyColor";
+import { useHomeTheme } from "@/context/HomeThemeContext";
 
 export default function QuestionDisplay({ selectedProblem }) {
+  const { theme } = useHomeTheme();
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="px-4 py-3 border-b flex-shrink-0">
+    <div className="h-full flex flex-col bg-[var(--home-surface)] gap-y-2 p-4">
+      <div className="flex-shrink-0">
         <div className="flex items-center gap-2 mb-2">
-          <h3 className="text-xl font-semibold">{selectedProblem.title}</h3>
-          <Badge className={getDifficultyColor(selectedProblem.difficulty)}>
+          <h3 className="xl:text-xl 2xl:text-2xl font-bold">{selectedProblem.title}</h3>
+          <Badge
+            className={getDifficultyColor(
+              selectedProblem.difficulty.toLowerCase()
+            )}
+          >
             {selectedProblem.difficulty}
           </Badge>
         </div>
@@ -21,29 +27,46 @@ export default function QuestionDisplay({ selectedProblem }) {
         </div>
       </div>
 
-      <ScrollArea className="flex-1 min-h-0 p-4">
+      <ScrollArea className="flex-1 min-h-0">
         <div>
-          <p>{selectedProblem.description}</p>
+          {/* Description */}
+          <p className="xl:text-sm 2xl:text-lg text-[var(--home-muted)] 2xl:my-5 2 xl:my-2">
+            {selectedProblem.description}
+          </p>
+
           {/* Examples */}
-          
           {selectedProblem.examples && (
-            <div>
-              <h4 className="font-semibold mb-2">Examples</h4>
+            <div className="w-full bg-[var(--home-surface)] border-0">
+              <h4 className="font-semibold mb-2 xl:text-sm 2xl:text-lg">Examples</h4>
               {selectedProblem.examples.map((ex, idx) => (
-                <div
+                <Card
                   key={idx}
-                  className="mb-3 p-2 border rounded bg-muted/30 text-sm"
+                  className="w-full xl:mb-5 2xl:mb-8 p-1 xl:py-2 xl:px-3 2xl:p-6 rounded xl:text-xs 2xl:text-lg bg-[var(--home-bg)] border-1 border-[var(--home-border)] text-[var(--home-text)]"
                 >
-                  <p>
-                    <strong>Input:</strong> {JSON.stringify(ex.input, null, 2)}
-                  </p>
+                  <div className="flex flex-col gap-2">
+                    <p>
+                      <strong>Input:</strong>
+                    </p>
+                    <div>
+                      {Object.entries(ex.input).map(([key, value]) => (
+                        <p key={key}>
+                          {key}:{" "}
+                          {Array.isArray(value)
+                            ? `[ ${value.join(", ")} ]`
+                            : value}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
                   <p>
                     <strong>Output:</strong> {JSON.stringify(ex.output)}
                   </p>
-                  <p>
-                    <strong>Explanation:</strong> {ex.explanation}
+                  <p className="text-[var(--home-accent)]">
+                    <strong>Explanation: </strong>
+                    {ex.explanation}
                   </p>
-                </div>
+                </Card>
               ))}
             </div>
           )}

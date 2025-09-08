@@ -7,45 +7,39 @@ export default function Navbar() {
   const links = [
     { to: "/", label: "Landing" },
     { to: "/home", label: "Home" },
-    { to: "/interview", label: "Interview" },
+    // { to: "/interview", label: "Interview" },
   ];
 
   const linkClass = ({ isActive }) =>
     [
-      "px-3 py-2 rounded-md text-sm font-medium",
-      isActive ? `bg-${theme.colors.accent} text-${theme.colors.accentText}` : `text-${theme.colors.text} hover:bg-${theme.colors.border}`,
+      "px-3 py-2 rounded-md xl:text-sm 2xl:text-lg font-medium",
+      isActive
+        ? `text-[var(--home-accent)]`
+        : `text-[var(--home-text)] hover:bg-[var(--home-border)]`,
     ].join(" ");
 
   return (
-    <header
-      style={{
-        backgroundColor: theme.colors.surface,
-        borderBottom: `1px solid ${theme.colors.border}`,
-        color: theme.colors.accentAlt,
-        fontSize: "10px",
-        width: "100%",
-      }}
-    >
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <h1 className="font-bold">LoopAI</h1>
-          <nav className="flex items-center gap-2">
-            {links.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                className={linkClass}
-                end={l.to === "/"}
-                style={{
-                  color: theme.colors.text,
-                  fontSize: "16px",
-                }}
-              >
-                {l.label}
-              </NavLink>
-            ))}
-          </nav>
-        </div>
+    <header className="bg-[var(--home-surface)] border-b border-[var(--home-border)] w-[100vw] xl:h-1/16 2xl:h-1/18 xl:text-lg 2xl:text-xl">
+      <div className="flex items-center justify-between px-8">
+
+        <NavLink className="flex items-center" to="/">
+          <img src="/src/assets/icon.png" alt="LoopAI" className="xl:w-14 2xl:w-20" />
+          <h1 className="font-bold text-[var(--home-accentAlt)]">LoopAI</h1>
+        </NavLink>
+
+        <nav className="flex items-center gap-2">
+          {links.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className={linkClass}
+              end={l.to === "/"}
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
+
       </div>
     </header>
   );

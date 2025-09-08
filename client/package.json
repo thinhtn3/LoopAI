@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/geist-mono": "^5.2.6",
+    "@fontsource/geist-sans": "^5.2.5",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-scroll-area": "^1.2.10",
@@ -20,6 +22,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.541.0",
     "motion": "^12.23.12",
+    "non.geist": "^1.0.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.8.2",
