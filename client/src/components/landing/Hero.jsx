@@ -3,8 +3,20 @@ import { Link } from "react-router-dom";
 import { BoxReveal } from "@/components/magicui/box-reveal";
 import DefaultButton from "@/components/common/DefaultButton";
 import { useHomeTheme } from "@/context/HomeThemeContext";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Hero() {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      setAuthenticated(data.session !== null);
+    };
+    checkAuth();
+  }, []);
+
   const { theme } = useHomeTheme();
   return (
     <section
@@ -56,7 +68,7 @@ export default function Hero() {
               asChild //passes parent styling to child which is Link
               className="w-1/7 h-10.5 text-left text-md font-medium bg-[var(--home-accent)] text-[var(--home-accentText)] border border-[var(--home-border)] transition-all duration-150 hover:bg-[var(--home-accentHover)] hover:w-1/6"
             >
-              <Link style={{ color: theme.colors.accentText }} to="/home">
+              <Link style={{ color: theme.colors.accentText }} to={authenticated ? "/home" : "/auth"}>
                 Start a mock interview
               </Link>
             </DefaultButton>
