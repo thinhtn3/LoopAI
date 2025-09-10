@@ -1,24 +1,73 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useRef, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton";
 import { useHomeTheme } from "@/context/HomeThemeContext";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Chatbox({ code, question }) {
   const [userInput, setUserInput] = useState("");
-  const [messages, setMessages] = useState(["Type here to start a conversation with LoopAI!"]);
+  const [messages, setMessages] = useState([
+    "Type here to start a conversation with LoopAI!",
+  ]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const { theme } = useHomeTheme();
   const bottomRef = useRef(null);
-  // useEffect(() => {
-  //   console.log(question);
-  // }, [question]);
 
-  
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  //check if sessionId exists in supabase
+
+  useEffect(() => {
+    const checkSessionId = async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/chat/session`,
+        {
+          params: {
+            userId: user.userId,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setSessionId(response.data.sessionId);
+      }
+    };
+
+    if (user.userId) {
+      checkSessionId();
+    }
+  }, [user]);
+
+  //if sessionId is set, search for history of messages in supabase
+  useEffect(() => {
+    const searchHistory = async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/chat/history`,
+        {
+          params: {
+            sessionId: sessionId,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("History:", response.data.history);
+        setMessages(response.data.history);
+      }
+    };
+
+    if (sessionId) {
+      searchHistory();
+    }
+  }, [sessionId]);
+
+  useEffect(() => {
+    console.log("Messages:", messages);
+  }, [messages]);
+
   //Scroll to bottom of chat box when new messages are added
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -40,16 +89,17 @@ export default function Chatbox({ code, question }) {
     setUserInput("");
     setIsLoading(true);
     try {
-
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/chat/`,
         {
           userMessage: userInput,
-          sessionId: sessionId,
+          userId: user.userId,
           userCode: code,
           question: question,
         }
       );
+
+      //TODO: Get history of messages for the sessionId
 
       //If response is successful, prepare model response and add to messages state for display
       if (response.status === 200) {
@@ -64,7 +114,6 @@ export default function Chatbox({ code, question }) {
       } else {
         console.error("No response from API");
       }
-
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
@@ -96,7 +145,10 @@ export default function Chatbox({ code, question }) {
           placeholder="Type a message..."
           className="resize-none h-12 max-h-28 flex-1 overflow-auto bg-[var(--home-bg)] border-1 border-[var(--home-border)]"
         />
-        <DefaultButton className="bg-[var(--home-accent)] text-[var(--home-accentText)]" onClick={handleSendMessage}>
+        <DefaultButton
+          className="bg-[var(--home-accent)] text-[var(--home-accentText)]"
+          onClick={handleSendMessage}
+        >
           Send
         </DefaultButton>
       </div>

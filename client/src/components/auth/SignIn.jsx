@@ -29,10 +29,10 @@ export default function SignIn({ setShowSignUp }) {
         });
         //store session id in local storage
         if (response.status === 200) {
-            localStorage.setItem("sessionId", response.data.session);
+            localStorage.setItem("user", JSON.stringify({sessionId: response.data.session, userId: response.data.userId}));
             navigate("/home");
         } else {
-            //TODO: Add error message for invalid credentials
+            // TODO: Add error message for invalid credentials
             console.error("Error storing session id");
         }
         

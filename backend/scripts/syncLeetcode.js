@@ -86,6 +86,8 @@ const uploadFirstPage = async () => {
     }
 }
 
+uploadFirstPage();
+
 const p = async () => {
     return prisma.problem.findUnique({
         where: { slug: "two-sum" },

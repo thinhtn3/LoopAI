@@ -10,8 +10,9 @@ model Session {
   id        String   @id @default(uuid())
   title     String?
   model     String
-  messages  Message[]
   createdAt DateTime @default(now())
+  userId    String   @unique
+  messages  Message[]
 }
 
 model Message {
