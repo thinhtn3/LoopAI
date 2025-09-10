@@ -4,8 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton";
-import { useHomeTheme } from "@/context/HomeThemeContext";
-import { supabase } from "@/lib/supabaseClient";
 
 export default function Chatbox({ code, question }) {
   const [userInput, setUserInput] = useState("");
@@ -13,36 +11,12 @@ export default function Chatbox({ code, question }) {
     "Type here to start a conversation with LoopAI!",
   ]);
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId, setSessionId] = useState(null);
-  const { theme } = useHomeTheme();
+  const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId"));
   const bottomRef = useRef(null);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  //check if sessionId exists in supabase
-
-  useEffect(() => {
-    const checkSessionId = async () => {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/chat/session`,
-        {
-          params: {
-            userId: user.userId,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        setSessionId(response.data.sessionId);
-      }
-    };
-
-    if (user.userId) {
-      checkSessionId();
-    }
-  }, [user]);
-
-  //if sessionId is set, search for history of messages in supabase
+  //Search for history of messages in supabase
   useEffect(() => {
     const searchHistory = async () => {
       const response = await axios.get(
@@ -54,7 +28,7 @@ export default function Chatbox({ code, question }) {
         }
       );
       if (response.status === 200) {
-        console.log("History:", response.data.history);
+        console.log("History:", response.data);
         setMessages(response.data.history);
       }
     };
@@ -98,8 +72,6 @@ export default function Chatbox({ code, question }) {
           question: question,
         }
       );
-
-      //TODO: Get history of messages for the sessionId
 
       //If response is successful, prepare model response and add to messages state for display
       if (response.status === 200) {

@@ -6,13 +6,13 @@ import { useHomeTheme } from "@/context/HomeThemeContext";
 import logo from "@/assets/icon.png";
 import Navbar from "@/components/common/Navbar";
 
-export default function Auth() {
+export default function Auth({ authenticated, setAuthenticated, setSessionId }) {
   const [showSignUp, setShowSignUp] = useState(false);
   const { theme } = useHomeTheme();
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-between bg-[var(--home-bg)]">
-      <Navbar />
+      <Navbar authenticated={authenticated} setAuthenticated={setAuthenticated} setSessionId={setSessionId} />
 
       <div className="h-full w-full flex flex-col items-center justify-center gap-4">
         <div className="flex items-center">
@@ -31,7 +31,7 @@ export default function Auth() {
               : "Sign in to your account to continue"}
           </p>
         </div>
-        {showSignUp ? <SignUp setShowSignUp={setShowSignUp} /> : <SignIn setShowSignUp={setShowSignUp} />}
+        {showSignUp ? <SignUp setShowSignUp={setShowSignUp} setAuthenticated={setAuthenticated} /> : <SignIn setShowSignUp={setShowSignUp} setAuthenticated={setAuthenticated} />}
       </div>
     </div>
   );

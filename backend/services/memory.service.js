@@ -33,8 +33,7 @@ export async function getHistory(sessionId) {
   // Differentiate between user and model messages (Human Message and AIMessage are classes)
   // console.log("History:", history.messages[0] instanceof HumanMessage);
   // console.log("History:", history.messages[1] instanceof AIMessage);
-   
-  // console.log("History:", history.messages[2] == instanceOf(UserMessage));
+  
 
   //Return the InMemoryChatMessageHistory for the given sessionId, if it exists, return the existing one
   return history;

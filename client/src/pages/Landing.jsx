@@ -4,12 +4,12 @@ import FeaturesGrid from "@/components/landing/FeaturesGrid";
 // import HowItWorks from '@/components/home/HowItWorks';
 import FooterCta from "@/components/landing/FooterCta";
 
-export default function Landing() {
+export default function Landing({ user }) {
   return (
     <div className="w-screen h-screen bg-[var(--home-bg)]">
-      <Navbar />
+      <Navbar user={user} />
       <div>
-        <Hero />
+        <Hero user={user} />
         <FeaturesGrid />
       </div>
     </div>

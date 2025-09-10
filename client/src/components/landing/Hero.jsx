@@ -6,17 +6,7 @@ import { useHomeTheme } from "@/context/HomeThemeContext";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export default function Hero() {
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      setAuthenticated(data.session !== null);
-    };
-    checkAuth();
-  }, []);
-
+export default function Hero({ authenticated }) {
   const { theme } = useHomeTheme();
   return (
     <section

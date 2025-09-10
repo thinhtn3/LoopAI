@@ -1,7 +1,6 @@
-import Layout from "../components/layout/Layout";
+
 import CodeEditor from "../components/ide/CodeEditor";
 import Chatbox from "../components/ide/Chatbox";
-import ThemeSelector from "../components/ide/ThemeSelector";
 import { useHomeTheme } from "@/context/HomeThemeContext";
 import { useState, useEffect, useRef } from "react";
 import DefaultButton from "@/components/common/DefaultButton";
@@ -11,17 +10,20 @@ import OutputBox from "../components/ide/OutputBox";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/common/Navbar";
 import { Play } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 import axios from "axios";
-
-export default function Interview() {
+export default function Interview({ user, isLoading }) {
   const { theme } = useHomeTheme();
   const [code, setCode] = useState("print('Hello, World!')");
   const [output, setOutput] = useState("");
-  const [selectedProblem, setSelectedProblem] = useState(null); // Default question, object from questionBank
+  const [selectedProblem, setSelectedProblem] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const slug = searchParams.get("slug");
   const ranRef = useRef(false);
+  const navigate = useNavigate();
+
 
   const fetchQuestion = async () => {
     const response = await axios.get(
@@ -30,6 +32,12 @@ export default function Interview() {
     setSelectedProblem(response.data.question);
     console.log("fetched question");
   };
+
+  useEffect(() => {
+    if (!user && !isLoading) {
+      navigate("/auth");
+    }
+  }, [user, isLoading]);
 
   useEffect(() => {
     if (ranRef.current) return;
@@ -51,7 +59,7 @@ export default function Interview() {
         color: theme.colors.text,
       }}
     >
-      <Navbar />
+      <Navbar user={user} />
       {/* Main Content */}
       <div className="flex-1 flex min-h-0">
         {/* Question Display Section */}

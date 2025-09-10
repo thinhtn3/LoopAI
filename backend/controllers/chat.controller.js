@@ -1,6 +1,5 @@
 import { HTTP_STATUS_CODES } from "../constants/index.js";
 
-import { v4 as uuidv4 } from "uuid";
 import { geminiChat } from "../services/chat.service.js";
 import { getSession, createSession } from "../services/sessions.service.js";
 import { getHistory } from "../services/memory.service.js";
@@ -15,16 +14,13 @@ const chatController = async (req, res) => {
   }
 
   try {
-    //Find Session ID
+    //Find Session ID or create a new session if none exist
     let session = await getSession(userId);
-
-    //Create a new session if it doesn't exist and set it to the current session
     if (!session) {
       session = await createSession(userId);
     }
 
     const aiResponse = await geminiChat(session.id, userMessage, userCode, question);
-
 
     return res.status(HTTP_STATUS_CODES.SUCCESS).json({
       response: aiResponse,
@@ -45,12 +41,16 @@ const getSessionController = async (req, res) => {
 
 const getHistoryController = async (req, res) => {
   const { sessionId } = req.query;
-  const history = await getHistory(sessionId);
+
+  //returns InMemoryChatMessageHistory object
+  const history = await getHistory(sessionId); 
+
+  //convert InMemoryChatMessageHistory object to array of objects {role: "user" | "model", content: string}
   const chatHistory = history.messages.map((message) => ({
     role: message instanceof HumanMessage ? "user" : "model",
     content: message.content,
   }));
-  console.log("Chat History:", chatHistory);
+
   return res.status(HTTP_STATUS_CODES.SUCCESS).json({ history: chatHistory });
 };
 

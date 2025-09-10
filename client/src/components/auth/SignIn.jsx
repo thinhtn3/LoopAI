@@ -22,14 +22,13 @@ export default function SignIn({ setShowSignUp }) {
             console.error(error);
             return;
         }  
-
-        console.log(data)
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/`, {
             userId: data.user.id,
         });
         //store session id in local storage
         if (response.status === 200) {
             localStorage.setItem("user", JSON.stringify({sessionId: response.data.session, userId: response.data.userId}));
+            console.log("Authenticated");
             navigate("/home");
         } else {
             // TODO: Add error message for invalid credentials
