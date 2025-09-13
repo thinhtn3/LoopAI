@@ -1,24 +1,23 @@
 import { HTTP_STATUS_CODES } from "../constants/index.js";
 import { createSession, getSession } from "../services/sessions.service.js";
-import prisma from "../config/database.js";
 
 const authController = async (req, res) => {
   //validate userId
-  const { userId } = req.body;
+  const { userId, problemSlug } = req.body;
   if (!userId) {
     return res
       .status(HTTP_STATUS_CODES.BAD_REQUEST)
       .json({ message: "User ID is required" });
   }
   //check if session exist with userId and return session
-  const session = await getSession(userId);
+  const session = await getSession(userId, problemSlug);
 
   //if session does not exist, create a new session
   if (!session) {
-    const newSession = await createSession(userId);
+    const newSession = await createSession(userId, problemSlug);
     return res
       .status(HTTP_STATUS_CODES.SUCCESS)
-      .json({ session: newSession.id, userId: userId });
+      .json({ session: newSession.id, userId: userId, problemSlug: problemSlug });
   }
 
   return res

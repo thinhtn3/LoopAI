@@ -15,6 +15,7 @@ export default function SignUp({ setShowSignUp }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
             console.error("Passwords do not match");

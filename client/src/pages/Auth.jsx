@@ -1,18 +1,26 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import SignIn from "@/components/auth/signIn";
 import SignUp from "@/components/auth/signUp";
-import { useHomeTheme } from "@/context/HomeThemeContext";
 import logo from "@/assets/icon.png";
 import Navbar from "@/components/common/Navbar";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-export default function Auth({ authenticated, setAuthenticated, setSessionId }) {
+
+export default function Auth({ user, isLoading }) {
   const [showSignUp, setShowSignUp] = useState(false);
-  const { theme } = useHomeTheme();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    //If user is authenticated, redirect to problems
+    if (user && !isLoading) {
+      navigate("/problems");
+    }
+  }, [user, isLoading]);
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-between bg-[var(--home-bg)]">
-      <Navbar authenticated={authenticated} setAuthenticated={setAuthenticated} setSessionId={setSessionId} />
+      <Navbar user={user} isLoading={isLoading} />
 
       <div className="h-full w-full flex flex-col items-center justify-center gap-4">
         <div className="flex items-center">
@@ -31,7 +39,7 @@ export default function Auth({ authenticated, setAuthenticated, setSessionId }) 
               : "Sign in to your account to continue"}
           </p>
         </div>
-        {showSignUp ? <SignUp setShowSignUp={setShowSignUp} setAuthenticated={setAuthenticated} /> : <SignIn setShowSignUp={setShowSignUp} setAuthenticated={setAuthenticated} />}
+        {showSignUp ? <SignUp setShowSignUp={setShowSignUp} user={user} isLoading={isLoading} /> : <SignIn setShowSignUp={setShowSignUp} user={user} isLoading={isLoading} />}
       </div>
     </div>
   );

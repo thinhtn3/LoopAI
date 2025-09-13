@@ -5,7 +5,7 @@ import ChatBubble from "./ChatBubble";
 import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton";
 
-export default function Chatbox({ code, question }) {
+export default function Chatbox({ code, question, user, problemSlug }) {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([
     "Type here to start a conversation with LoopAI!",
@@ -14,7 +14,6 @@ export default function Chatbox({ code, question }) {
   const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId"));
   const bottomRef = useRef(null);
 
-  const user = JSON.parse(localStorage.getItem("user"));
 
   //Search for history of messages in supabase
   useEffect(() => {
@@ -28,7 +27,6 @@ export default function Chatbox({ code, question }) {
         }
       );
       if (response.status === 200) {
-        console.log("History:", response.data);
         setMessages(response.data.history);
       }
     };
@@ -39,7 +37,6 @@ export default function Chatbox({ code, question }) {
   }, [sessionId]);
 
   useEffect(() => {
-    console.log("Messages:", messages);
   }, [messages]);
 
   //Scroll to bottom of chat box when new messages are added
@@ -63,13 +60,15 @@ export default function Chatbox({ code, question }) {
     setUserInput("");
     setIsLoading(true);
     try {
+      console.log(user)
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/chat/`,
         {
           userMessage: userInput,
-          userId: user.userId,
+          userId: user.id,
           userCode: code,
           question: question,
+          problemSlug: problemSlug,
         }
       );
 

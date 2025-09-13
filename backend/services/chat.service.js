@@ -1,6 +1,7 @@
 import chainWithMemory from "../lib/chain.js";
 import prisma from "../config/database.js";
 
+//Store user message and model response in database and call chainWithMemory to get response from LLM
 export const geminiChat = async (sessionId, userMessage, userCode, question) => {
   if (!userMessage || !userMessage.trim()) {
     throw new Error("User message is required");

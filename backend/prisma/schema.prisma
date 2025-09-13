@@ -11,9 +11,13 @@ model Session {
   title     String?
   model     String
   createdAt DateTime @default(now())
-  userId    String   @unique
+  userId    String
   messages  Message[]
+  problemSlug String
+  problem     Problem? @relation(fields: [problemSlug], references: [slug], onDelete: SetNull, onUpdate: Cascade)
+  @@unique([userId, problemSlug])
 }
+
 
 model Message {
   id        String   @id @default(uuid())
@@ -34,6 +38,7 @@ model Problem {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   tags        Tag[]                     // Many-to-many relationship
+  sessions    Session[]
   @@index([title]) // basic btree index (use pg_trgm below for fuzzy/substring)
 }
 

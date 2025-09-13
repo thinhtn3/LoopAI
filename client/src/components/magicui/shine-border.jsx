@@ -17,7 +17,7 @@ export function ShineBorder({
   ...props
 }) {
   return (
-    (<div
+    <div
       style={
         {
           "--border-width": `${borderWidth}px`,
@@ -40,6 +40,6 @@ export function ShineBorder({
         "pointer-events-none absolute inset-0 size-full rounded-[inherit] will-change-[background-position] motion-safe:animate-shine",
         className
       )}
-      {...props} />)
+      {...props} />
   );
 }

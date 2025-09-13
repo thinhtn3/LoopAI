@@ -11,6 +11,9 @@ import DefaultButton from "../common/DefaultButton";
 export default function SignIn({ setShowSignUp }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+
     const navigate = useNavigate();
 
     const handleSignIn = async () => {
@@ -20,6 +23,7 @@ export default function SignIn({ setShowSignUp }) {
         });
         if (error) {
             console.error(error);
+            setError(error.message);
             return;
         }  
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/`, {
@@ -27,9 +31,9 @@ export default function SignIn({ setShowSignUp }) {
         });
         //store session id in local storage
         if (response.status === 200) {
-            localStorage.setItem("user", JSON.stringify({sessionId: response.data.session, userId: response.data.userId}));
+            // localStorage.setItem("user", JSON.stringify({sessionId: response.data.session, userId: response.data.userId}));
             console.log("Authenticated");
-            navigate("/home");
+            navigate("/problems");
         } else {
             // TODO: Add error message for invalid credentials
             console.error("Error storing session id");
@@ -56,6 +60,7 @@ export default function SignIn({ setShowSignUp }) {
                         <Label htmlFor="password">Password</Label>
                         <Input id="password" className="border-1 border-[var(--home-border)] bg-[var(--home-bg)]" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
+                    {error && <p className="text-[var(--home-error)]">{error}</p>}
                     <p>No account? <span className="text-[var(--home-accent)] cursor-pointer" onClick={handleClick}>Sign Up</span></p>
                     <DefaultButton className="bg-[var(--home-accent)] text-[var(--home-accentText)] border border-[var(--home-border)] transition-all duration-150 hover:bg-[var(--home-accentHover)]" onClick={handleSignIn}>Sign In</DefaultButton>
                 </CardContent>

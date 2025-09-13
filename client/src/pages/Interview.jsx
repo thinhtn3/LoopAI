@@ -1,4 +1,3 @@
-
 import CodeEditor from "../components/ide/CodeEditor";
 import Chatbox from "../components/ide/Chatbox";
 import { useHomeTheme } from "@/context/HomeThemeContext";
@@ -12,7 +11,6 @@ import Navbar from "@/components/common/Navbar";
 import { Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
 import axios from "axios";
 export default function Interview({ user, isLoading }) {
   const { theme } = useHomeTheme();
@@ -24,13 +22,11 @@ export default function Interview({ user, isLoading }) {
   const ranRef = useRef(false);
   const navigate = useNavigate();
 
-
   const fetchQuestion = async () => {
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${slug}`
     );
     setSelectedProblem(response.data.question);
-    console.log("fetched question");
   };
 
   useEffect(() => {
@@ -38,6 +34,19 @@ export default function Interview({ user, isLoading }) {
       navigate("/auth");
     }
   }, [user, isLoading]);
+
+  useEffect(() => {
+    const fetchSessionId = async () => {
+      if (!user) return;
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/`, { userId: user.id, problemSlug: slug });
+      if (response.status === 200) {
+        localStorage.setItem("sessionId", response.data.session);
+      } else {
+        console.error("Error fetching session id");
+      }
+    };
+    fetchSessionId();
+  }, [user]);
 
   useEffect(() => {
     if (ranRef.current) return;
@@ -97,7 +106,12 @@ export default function Interview({ user, isLoading }) {
             >
               Code Editor
             </h2>
-            <DefaultButton onClick={handleRunCode} className="bg-[var(--home-accent)] text-[var(--home-accentText)] w-1/16 hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg xl:w-1/12 2xl:w-1/16"><Play /> Run</DefaultButton>
+            <DefaultButton
+              onClick={handleRunCode}
+              className="bg-[var(--home-accent)] text-[var(--home-accentText)] w-1/16 hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg xl:w-1/12 2xl:w-1/16"
+            >
+              <Play /> Run
+            </DefaultButton>
           </div>
 
           {/* Code Editor */}
@@ -108,17 +122,16 @@ export default function Interview({ user, isLoading }) {
         </div>
 
         {/* Chat Section */}
-        <div
-          className="w-[20vw] flex flex-col border-0 overflow-hidden bg-[var(--home-surface)]"
-        >
+        <div className="w-[20vw] flex flex-col border-0 overflow-hidden bg-[var(--home-surface)]">
           <h2
             className="px-4 py-3 border-b flex-shrink-0 text-lg font-semibold border-1 border-[var(--home-border)]"
             style={{ color: theme.colors.text }}
-          >AI Assistant
+          >
+            AI Assistant
           </h2>
           <div className="flex-1 min-h-0">
             {selectedProblem ? (
-              <Chatbox code={code} question={selectedProblem} />
+              <Chatbox code={code} question={selectedProblem} user={user} problemSlug={slug} />
             ) : (
               <div className="flex-1 flex items-center justify-center">
                 <p className="text-sm text-muted-foreground">

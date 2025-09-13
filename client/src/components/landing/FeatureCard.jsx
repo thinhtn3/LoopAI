@@ -1,36 +1,19 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { useHomeTheme } from "@/context/HomeThemeContext";
-
-export default function FeatureCard({ title, description, icon, width, height }) {
-  const { theme } = useHomeTheme();
-
+export default function FeatureCard({
+  title,
+  description,
+  icon,
+  width,
+  height,
+}) {
   return (
-    <Card
-      style={{
-        backgroundColor: theme.colors.surface,
-        color: theme.colors.text,
-        border: `1px solid ${theme.colors.border}`,
-        width: width || "100%",
-        height: height || "100%",
-        paddingX: "4rem",
-        paddingY: "4rem",
-      }}
-    >
-      <CardHeader className="flex items-center">
-        <div className="w-8 text-[var(--home-accent)]">
-          {icon}
-        </div>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p style={{ color: theme.colors.muted }}>{description}</p>
-      </CardContent>
-    </Card>
+    <div className="flex flex-col items-center justify-center w-1/5 gap-2 text-[var(--home-accentHover)]">
+      <div className="w-15 h-15 flex items-center justify-center border border-[var(--home-accent)] rounded-sm">
+        {icon}
+      </div>
+      <p className="text-[var(--home-text)] text-center">{title}</p>
+      <p className="text-[var(--home-muted)] text-center">{description}</p>
+    </div>
   );
 }

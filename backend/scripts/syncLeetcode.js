@@ -62,7 +62,7 @@ const uploadFirstPage = async () => {
                 url: `https://leetcode.com/problems/${question.titleSlug}`,
                 difficulty: question.difficulty,
                 //Since problem and tag have many-to-many relationship, use connectOrCreate to check if tag exists in tag table then link
-                //This lets us know to look at the tag table before linking
+                //This lets us know to look at the tag table 
                 tags: {
                     //connectOrCreate: if tag does not exist, create it then link
                     connectOrCreate: question.topicTags.map((tag) => ({ where: { name: tag.name }, create: { name: tag.name } })),

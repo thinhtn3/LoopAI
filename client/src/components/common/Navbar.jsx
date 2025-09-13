@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 export default function Navbar({ user, isLoading }) {
   const navigate = useNavigate();
   const links = [
-    { to: "/", label: "Landing" },
-    { to: "/home", label: "Home" },
+    { to: "/", label: "Home" },
+    { to: "/problems", label: "Problems" },
     // { to: "/interview", label: "Interview" },
   ];
 
@@ -31,16 +31,31 @@ export default function Navbar({ user, isLoading }) {
   };
 
   return (
-    <header className="bg-[var(--home-surface)] border-b border-[var(--home-border)] w-[100vw] xl:h-1/16 2xl:h-1/18 xl:text-lg 2xl:text-xl">
+    <header className="bg-[var(--home-surface)] border-b border-[var(--home-border)] w-[100vw] xl:text-lg 2xl:text-xl">
       <div className="flex items-center justify-between px-8">
         <NavLink className="flex items-center" to="/">
           <img
             src="/src/assets/icon.png"
             alt="LoopAI"
-            className="xl:w-14 2xl:w-20"
+            className="sm:w-5 lg:w-5 xl:w-15 2xl:w-20"
           />
           <h1 className="font-bold text-[var(--home-accentAlt)]">LoopAI</h1>
         </NavLink>
+
+        <div>
+          <nav className="flex items-center gap-2">
+              {links.map((l) => (
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  className={linkClass}
+                  end={l.to === "/"}
+                >
+                  {l.label}
+                </NavLink>
+              ))}
+            </nav>
+        </div>
 
         <div className="flex items-center gap-2">
           {user && !isLoading ? (
@@ -55,20 +70,8 @@ export default function Navbar({ user, isLoading }) {
               Login
             </NavLink>
           )}
-
-          <nav className="flex items-center gap-2">
-            {links.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                className={linkClass}
-                end={l.to === "/"}
-              >
-                {l.label}
-              </NavLink>
-            ))}
-          </nav>
         </div>
+
       </div>
     </header>
   );

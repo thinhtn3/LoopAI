@@ -22,12 +22,12 @@ export default function ChatBubble({ role, content, timestamp }) {
   return (
     <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className="max-w-[80%] rounded-xl px-3 py-2 text-sm shadow-sm border"
+        className="max-w-[80%] rounded-xl px-3 py-2 xl:text-xs 2xl:text-sm shadow-sm border"
         style={bubbleStyle}
       >
         <p className="whitespace-pre-wrap leading-relaxed">{content}</p>
         {timestamp && (
-          <p className="mt-1 text-[11px]" style={timeStyle}>
+          <p className="mt-1" style={timeStyle}>
             {new Date(timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
           </p>
         )}
