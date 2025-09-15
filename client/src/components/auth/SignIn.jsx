@@ -26,20 +26,8 @@ export default function SignIn({ setShowSignUp }) {
             setError(error.message);
             return;
         }  
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/`, {
-            userId: data.user.id,
-        });
-        //store session id in local storage
-        if (response.status === 200) {
-            // localStorage.setItem("user", JSON.stringify({sessionId: response.data.session, userId: response.data.userId}));
-            console.log("Authenticated");
-            navigate("/problems");
-        } else {
-            // TODO: Add error message for invalid credentials
-            console.error("Error storing session id");
-        }
-        
-        
+        console.log("Authenticated");
+        navigate("/problems");
     }
     const handleClick = () => {
         setShowSignUp(true);

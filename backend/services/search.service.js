@@ -1,9 +1,9 @@
 import "dotenv/config";
-import axios from "axios";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+//Search for problems by keyword
 export const searchByKeyword = async (query) => {
   const problems = await prisma.problem.findMany({
     where: {

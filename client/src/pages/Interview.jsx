@@ -123,12 +123,6 @@ export default function Interview({ user, isLoading }) {
 
         {/* Chat Section */}
         <div className="w-[20vw] flex flex-col border-0 overflow-hidden bg-[var(--home-surface)]">
-          <h2
-            className="px-4 py-3 border-b flex-shrink-0 text-lg font-semibold border-1 border-[var(--home-border)]"
-            style={{ color: theme.colors.text }}
-          >
-            AI Assistant
-          </h2>
           <div className="flex-1 min-h-0">
             {selectedProblem ? (
               <Chatbox code={code} question={selectedProblem} user={user} problemSlug={slug} />

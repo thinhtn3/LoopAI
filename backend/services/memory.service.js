@@ -38,3 +38,10 @@ export async function getHistory(sessionId) {
   //Return the InMemoryChatMessageHistory for the given sessionId, if it exists, return the existing one
   return history;
 }
+
+export async function deleteCurrentHistory(sessionId) {
+  const deletedHistory = await prisma.message.deleteMany({
+    where: { sessionId },
+  });
+  return deletedHistory;
+}

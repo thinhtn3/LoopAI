@@ -1,6 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useRef, useEffect } from "react";
+import ArchiveAlertDialog from "./ArchiveAlertDialog";
 import ChatBubble from "./ChatBubble";
 import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton";
@@ -13,7 +14,6 @@ export default function Chatbox({ code, question, user, problemSlug }) {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId"));
   const bottomRef = useRef(null);
-
 
   //Search for history of messages in supabase
   useEffect(() => {
@@ -36,8 +36,7 @@ export default function Chatbox({ code, question, user, problemSlug }) {
     }
   }, [sessionId]);
 
-  useEffect(() => {
-  }, [messages]);
+  useEffect(() => {}, [messages]);
 
   //Scroll to bottom of chat box when new messages are added
   useEffect(() => {
@@ -60,7 +59,7 @@ export default function Chatbox({ code, question, user, problemSlug }) {
     setUserInput("");
     setIsLoading(true);
     try {
-      console.log(user)
+      console.log(user);
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/chat/`,
         {
@@ -92,8 +91,15 @@ export default function Chatbox({ code, question, user, problemSlug }) {
     }
   };
 
+
+
   return (
     <div className="w-full h-full flex flex-col">
+      <div className="flex justify-between items-center border-b border-[var(--home-border)] p-3">
+        <h2 className="">AI Assistant</h2>
+        <ArchiveAlertDialog sessionId={sessionId} setMessages={setMessages}/>
+      </div>
+
       {/* Chat history */}
       <ScrollArea className="flex-1 min-h-0 bg-[var(--home-surface)]">
         <div className="h-full w-full px-3 py-3 space-y-3">

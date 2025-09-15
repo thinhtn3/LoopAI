@@ -1,9 +1,8 @@
-import { supabase } from "../lib/supabase.js";
 import { v4 as uuidv4 } from "uuid";
 import prisma from "../config/database.js";
-
+//Create or update a session if exist
 export async function createSession(userId, problemSlug) {
-  console.log(problemSlug, "POOO");
+    //upsert = update or insert
   const newSession = await prisma.session.upsert({
     where: {
       userId_problemSlug: {
@@ -36,4 +35,11 @@ export async function getSession(userId, problemSlug) {
   });
 
   return session;
+}
+
+export async function deleteSession(sessionId) {
+  const deletedSession = await prisma.session.delete({
+    where: { id: sessionId },
+  });
+  return deletedSession;
 }

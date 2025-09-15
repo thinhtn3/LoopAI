@@ -48,6 +48,14 @@ model Tag {
   problems  Problem[]
 }
 
+model ArchivedConversation {
+  id          String @id @default(cuid())
+  sessionId   String
+  userId      String
+  data        Json
+  archivedAt  DateTime @default(now())
+}
+
 enum Difficulty {
   EASY
   MEDIUM

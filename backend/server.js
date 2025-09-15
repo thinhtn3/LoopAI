@@ -5,6 +5,7 @@ import errorHandler from "./middleware/errorHandler.js";
 import chatRoutes from "./routes/chat.route.js";
 import searchRoutes from "./routes/search.route.js";
 import authRoutes from "./routes/auth.route.js";
+import archiveRoutes from "./routes/archive.route.js";
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use("/api/chat", chatRoutes);
 app.use("/search", searchRoutes);
 app.use("/auth", authRoutes);
+app.use("/archive", archiveRoutes);
 
 app.use(errorHandler);
 
