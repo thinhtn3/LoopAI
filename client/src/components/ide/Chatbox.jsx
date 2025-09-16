@@ -6,6 +6,8 @@ import ChatBubble from "./ChatBubble";
 import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton";
 import usePushToTalk from "@/hooks/usePushToTalk";
+import { Mic, MicOff, Plus } from "lucide-react";
+import { Resizable } from "re-resizable";
 
 export default function Chatbox({ code, question, user, problemSlug }) {
   const [userInput, setUserInput] = useState("");
@@ -15,7 +17,8 @@ export default function Chatbox({ code, question, user, problemSlug }) {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId"));
   const bottomRef = useRef(null);
-  const { listening, transcript, startListening, stopListening } = usePushToTalk();
+  const { listening, transcript, startListening, stopListening } =
+    usePushToTalk();
 
   //Search for history of messages in supabase
   useEffect(() => {
@@ -37,13 +40,12 @@ export default function Chatbox({ code, question, user, problemSlug }) {
     }
   }, [sessionId]);
 
-    useEffect(() => {
-      if (transcript) {
-        console.log("Transcript: ", transcript);
-        setUserInput(userInput + " " + transcript);
-      }
-    }, [transcript]);
-
+  useEffect(() => {
+    if (transcript) {
+      console.log("Transcript: ", transcript);
+      setUserInput(transcript);
+    }
+  }, [transcript]);
 
   //Scroll to bottom of chat box when new messages are added
   useEffect(() => {
@@ -100,8 +102,8 @@ export default function Chatbox({ code, question, user, problemSlug }) {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex justify-between items-center border-b border-[var(--home-border)] p-3">
-        <h2 className="">AI Assistant</h2>
+      <div className="flex justify-between items-end border-1 border-t border-[var(--home-border)] p-4">
+        <h2 className="text-lg font-semibold">AI Assistant</h2>
         <ArchiveAlertDialog
           sessionId={sessionId}
           setMessages={setMessages}
@@ -126,30 +128,36 @@ export default function Chatbox({ code, question, user, problemSlug }) {
       <p>{listening ? "Listening" : "Not Listening"}</p>
 
       {/* User chat input */}
-      <div className="border-t border-[var(--home-border)] p-3 flex gap-2 flex-shrink-0 bg-[var(--home-surface)]">
+      <Resizable
+        defaultSize={{ height: "10%" }}
+        minHeight="10%"
+        maxHeight="100%"
+        enable={{ top: true }}
+        className="border-t border-[var(--home-border)] pt-3 px-3 flex gap-2 flex-shrink-0 bg-[var(--home-surface)]"
+      >
         <Textarea
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           placeholder="Type a message..."
-          className="resize-none h-12 max-h-28 flex-1 overflow-auto bg-[var(--home-bg)] border-1 border-[var(--home-border)]"
+          className="resize-none h-[100%] flex-1 overflow-auto bg-[var(--home-bg)] border-1 border-[var(--home-border)]"
         />
 
         <div className="flex flex-row gap-2">
           <DefaultButton
-            className="bg-[var(--home-accent)] text-[var(--home-accentText)]"
+            className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)]"
             onClick={listening ? stopListening : startListening}
           >
-            Push to Talk
+            {listening ? <Mic /> : <MicOff />}
           </DefaultButton>
-          
+
           <DefaultButton
-            className="bg-[var(--home-accent)] text-[var(--home-accentText)]"
+            className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)]"
             onClick={handleSendMessage}
           >
             Send
           </DefaultButton>
         </div>
-      </div>
+      </Resizable>
     </div>
   );
 }

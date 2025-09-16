@@ -10,9 +10,8 @@ import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/common/Navbar";
 import { Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Resizable } from "re-resizable";
 import axios from "axios";
-
-
 
 export default function Interview({ user, isLoading }) {
   const { theme } = useHomeTheme();
@@ -31,8 +30,6 @@ export default function Interview({ user, isLoading }) {
     setSelectedProblem(response.data.question);
   };
 
-
-
   useEffect(() => {
     if (!user && !isLoading) {
       navigate("/auth");
@@ -42,7 +39,10 @@ export default function Interview({ user, isLoading }) {
   useEffect(() => {
     const fetchSessionId = async () => {
       if (!user) return;
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/`, { userId: user.id, problemSlug: slug });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/`,
+        { userId: user.id, problemSlug: slug }
+      );
       if (response.status === 200) {
         localStorage.setItem("sessionId", response.data.session);
       } else {
@@ -76,7 +76,16 @@ export default function Interview({ user, isLoading }) {
       {/* Main Content */}
       <div className="flex-1 flex min-h-0">
         {/* Question Display Section */}
-        <div className="w-[20vw] flex flex-col  border-0 overflow-hidden bg-[var(--home-surface)]">
+        <Resizable
+          defaultSize={{
+            width: "20vw",
+            height: "100%",
+          }}
+          minWidth="20vw"
+          maxWidth="50vw"
+          minHeight="100%"
+          className="flex flex-col  border-0 overflow-hidden bg-[var(--home-surface)]"
+        >
           {selectedProblem ? (
             <QuestionDisplay selectedProblem={selectedProblem} />
           ) : (
@@ -86,7 +95,7 @@ export default function Interview({ user, isLoading }) {
               </p>
             </div>
           )}
-        </div>
+        </Resizable>
 
         {/* Code Editor Section */}
         <div
@@ -112,24 +121,46 @@ export default function Interview({ user, isLoading }) {
             </h2>
             <DefaultButton
               onClick={handleRunCode}
-              className="bg-[var(--home-accent)] text-[var(--home-accentText)] w-1/16 hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg xl:w-1/12 2xl:w-1/16"
+              className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg"
             >
               <Play /> Run
             </DefaultButton>
           </div>
 
           {/* Code Editor */}
-          <div className="flex flex-col h-full">
+          <div className="h-full flex flex-col min-h-0">
             <CodeEditor code={code} setCode={setCode} output={output} />
-            <OutputBox output={output} />
+            <Resizable
+              defaultSize={{ width: "100%", height: "25%" }}
+              minHeight="0%"
+              maxHeight="80%"
+              enable={{ top: true }}
+              className="overflow-hidden flex-shrink-0"
+            >
+              <OutputBox output={output} />
+            </Resizable>
           </div>
         </div>
 
         {/* Chat Section */}
-        <div className="w-[20vw] flex flex-col border-0 overflow-hidden bg-[var(--home-surface)]">
+        <Resizable
+          defaultSize={{
+            width: "20vw",
+            height: "100%",
+          }}
+          minWidth="20vw"
+          maxWidth="50vw"
+          minHeight="100%"
+          className="flex flex-col border-0 overflow-hidden bg-[var(--home-surface)]"
+        >
           <div className="flex-1 min-h-0">
             {selectedProblem ? (
-              <Chatbox code={code} question={selectedProblem} user={user} problemSlug={slug} />
+              <Chatbox
+                code={code}
+                question={selectedProblem}
+                user={user}
+                problemSlug={slug}
+              />
             ) : (
               <div className="flex-1 flex items-center justify-center">
                 <p className="text-sm text-muted-foreground">
@@ -138,7 +169,7 @@ export default function Interview({ user, isLoading }) {
               </div>
             )}
           </div>
-        </div>
+        </Resizable>
       </div>
     </div>
   );

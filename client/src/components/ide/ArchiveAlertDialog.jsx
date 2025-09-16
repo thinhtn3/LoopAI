@@ -10,9 +10,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
+import DefaultButton from "@/components/common/DefaultButton";
 
-export default function ArchiveAlertDialog({sessionId, setMessages, problemSlug}) {
-
+export default function ArchiveAlertDialog({
+  sessionId,
+  setMessages,
+  problemSlug,
+}) {
   const handleArchiveConversation = async () => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/archive/`,
@@ -32,21 +36,27 @@ export default function ArchiveAlertDialog({sessionId, setMessages, problemSlug}
       console.error("Error archiving conversation");
     }
   };
-  
+
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg xl:w-1/12 2xl:w-1/5 rounded-sm">New Chat</AlertDialogTrigger>
+      <AlertDialogTrigger>
+        <DefaultButton className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg">
+          New Chat
+        </DefaultButton>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. Your conversation will be archived and
+            a new chat will be created.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleArchiveConversation}>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleArchiveConversation}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

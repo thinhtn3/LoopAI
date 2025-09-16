@@ -1,9 +1,8 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useHomeTheme } from "@/context/HomeThemeContext";
 export default function OutputBox({ output }) {
-  const { theme } = useHomeTheme();
   return (
-    <div className="flex flex-col h-[25%] w-full overflow-y-scroll">
+    <div className="flex flex-col h-full w-full overflow-y-scroll">
       {/* Header */}
 
       {/* Output Content */}

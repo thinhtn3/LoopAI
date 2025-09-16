@@ -8,6 +8,7 @@ export const paraphrase = async (slug) => {
 
   const prompt = `
   Paraphrase the following LeetCode problem slug into a new technical interview question: ${slug}.
+  Keep the question concise and to the point.
   Return ONLY valid JSON with these fields:
   - title
   - description
