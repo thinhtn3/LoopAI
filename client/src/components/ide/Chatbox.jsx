@@ -5,6 +5,7 @@ import ArchiveAlertDialog from "./ArchiveAlertDialog";
 import ChatBubble from "./ChatBubble";
 import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton";
+import usePushToTalk from "@/hooks/usePushToTalk";
 
 export default function Chatbox({ code, question, user, problemSlug }) {
   const [userInput, setUserInput] = useState("");
@@ -14,6 +15,7 @@ export default function Chatbox({ code, question, user, problemSlug }) {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId"));
   const bottomRef = useRef(null);
+  const { listening, transcript, startListening, stopListening } = usePushToTalk();
 
   //Search for history of messages in supabase
   useEffect(() => {
@@ -30,13 +32,18 @@ export default function Chatbox({ code, question, user, problemSlug }) {
         setMessages(response.data.history);
       }
     };
-
     if (sessionId) {
       searchHistory();
     }
   }, [sessionId]);
 
-  useEffect(() => {}, [messages]);
+    useEffect(() => {
+      if (transcript) {
+        console.log("Transcript: ", transcript);
+        setUserInput(userInput + " " + transcript);
+      }
+    }, [transcript]);
+
 
   //Scroll to bottom of chat box when new messages are added
   useEffect(() => {
@@ -91,13 +98,15 @@ export default function Chatbox({ code, question, user, problemSlug }) {
     }
   };
 
-
-
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex justify-between items-center border-b border-[var(--home-border)] p-3">
         <h2 className="">AI Assistant</h2>
-        <ArchiveAlertDialog sessionId={sessionId} setMessages={setMessages}/>
+        <ArchiveAlertDialog
+          sessionId={sessionId}
+          setMessages={setMessages}
+          problemSlug={problemSlug}
+        />
       </div>
 
       {/* Chat history */}
@@ -113,6 +122,8 @@ export default function Chatbox({ code, question, user, problemSlug }) {
           <div ref={bottomRef} /> {/* Dummy div to scroll to bottom */}
         </div>
       </ScrollArea>
+      <p>{transcript}</p>
+      <p>{listening ? "Listening" : "Not Listening"}</p>
 
       {/* User chat input */}
       <div className="border-t border-[var(--home-border)] p-3 flex gap-2 flex-shrink-0 bg-[var(--home-surface)]">
@@ -122,12 +133,22 @@ export default function Chatbox({ code, question, user, problemSlug }) {
           placeholder="Type a message..."
           className="resize-none h-12 max-h-28 flex-1 overflow-auto bg-[var(--home-bg)] border-1 border-[var(--home-border)]"
         />
-        <DefaultButton
-          className="bg-[var(--home-accent)] text-[var(--home-accentText)]"
-          onClick={handleSendMessage}
-        >
-          Send
-        </DefaultButton>
+
+        <div className="flex flex-row gap-2">
+          <DefaultButton
+            className="bg-[var(--home-accent)] text-[var(--home-accentText)]"
+            onClick={listening ? stopListening : startListening}
+          >
+            Push to Talk
+          </DefaultButton>
+          
+          <DefaultButton
+            className="bg-[var(--home-accent)] text-[var(--home-accentText)]"
+            onClick={handleSendMessage}
+          >
+            Send
+          </DefaultButton>
+        </div>
       </div>
     </div>
   );

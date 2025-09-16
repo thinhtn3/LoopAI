@@ -6,7 +6,7 @@ import prisma from "../config/database.js";
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
 import { v4 as uuidv4 } from "uuid";
 
-export const archiveConversation = async (sessionId) => {
+export const archiveConversation = async (sessionId, problemSlug) => {
     const history = await getHistory(sessionId);
     //get userId from session
     const session = await prisma.session.findUnique({
@@ -29,6 +29,7 @@ export const archiveConversation = async (sessionId) => {
             sessionId,
             userId,
             data,
+            problemSlug,
         },
     });
     return archivedConversation;

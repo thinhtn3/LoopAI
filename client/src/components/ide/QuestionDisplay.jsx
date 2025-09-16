@@ -7,6 +7,21 @@ import { useHomeTheme } from "@/context/HomeThemeContext";
 export default function QuestionDisplay({ selectedProblem }) {
   const { theme } = useHomeTheme();
 
+  const formatWithCommaSpace = (value) => {
+    if (Array.isArray(value)) {
+      return `[ ${value
+        .map((v) => (typeof v === "object" ? JSON.stringify(v) : String(v)))
+        .join(", ")} ]`;
+    }
+    if (value && typeof value === "object") {
+      return JSON.stringify(value).replace(/,\s*/g, ", ");
+    }
+    if (typeof value === "string") {
+      return value.replace(/,\s*/g, ", ");
+    }
+    return String(value);
+  };
+
   return (
     <div className="h-full flex flex-col bg-[var(--home-surface)] gap-y-2 p-4">
       <div className="flex-shrink-0">
@@ -51,16 +66,14 @@ export default function QuestionDisplay({ selectedProblem }) {
                       {Object.entries(ex.input).map(([key, value]) => (
                         <p key={key}>
                           {key}:{" "}
-                          {Array.isArray(value)
-                            ? `[ ${value.join(", ")} ]`
-                            : value}
+                          {formatWithCommaSpace(value)}
                         </p>
                       ))}
                     </div>
                   </div>
 
                   <p>
-                    <strong>Output:</strong> {JSON.stringify(ex.output)}
+                    <strong>Output:</strong> {formatWithCommaSpace(ex.output)}
                   </p>
                   <p className="text-[var(--home-accent)]">
                     <strong>Explanation: </strong>

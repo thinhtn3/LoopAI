@@ -3,9 +3,9 @@ import { deleteSession } from "../services/sessions.service.js";
 import { deleteCurrentHistory } from "../services/memory.service.js";
 
 export const archiveController = async (req, res) => {
-  const { sessionId } = req.body;
+  const { sessionId, problemSlug } = req.body;
   console.log("Archive controller", sessionId);
-  const archivedConversation = await archiveConversation(sessionId);
+  const archivedConversation = await archiveConversation(sessionId, problemSlug);
   res.json({ archivedConversation });
 };
 

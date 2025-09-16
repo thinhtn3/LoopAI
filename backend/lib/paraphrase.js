@@ -7,31 +7,45 @@ export const paraphrase = async (slug) => {
   const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   const prompt = `
-  Paraphrase the following Leetcode problem slug into a question for a technical interview: ${slug}.
-  Return strictly valid JSON with the following fields:
+  Paraphrase the following LeetCode problem slug into a new technical interview question: ${slug}.
+  Return ONLY valid JSON with these fields:
   - title
   - description
   - difficulty
-  - examples (array with input, output, explanation)
+  - examples (array of objects). Each example must contain:
+    {
+      "input": { "paramName": value, ... },
+      "output": expectedValue,
+      "explanation": "short explanation"
+    }
   - constraints
   - tags
   
-  Keep descriptions concise, fairly vague and to the point.
-  IMPORTANT: The output must be ONLY valid JSON.
-  Do not include markdown fences, code blocks, or extra text.
-  Provide 1-2 test cases under "examples".
+  Rules:
+  - "input" MUST be a JSON object with parameter names as keys (not a string).
+  - "output" MUST be a raw JSON value (string, number, array, or object) — not wrapped in quotes unless it's a string.
+  - Provide 1–2 examples.
+  - Do not include markdown fences or extra text.
   `;
 
-  
   const result = await model.generateContent(prompt);
 
   // Grab text
   let text = result.response.candidates[0].content.parts[0].text;
 
-  // Remove ```json and ``` if they appear
-  text = text.replace(/```json\n?/g, "").replace(/```/g, "").trim();
+  // Strip fences and extra junk
+  text = text
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
 
-  // Try parsing as JSON
+  // Keep only the JSON object
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+  if (start !== -1 && end !== -1) {
+    text = text.substring(start, end + 1);
+  }
+
   let json;
   try {
     json = JSON.parse(text);

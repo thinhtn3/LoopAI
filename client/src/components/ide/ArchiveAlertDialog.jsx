@@ -11,12 +11,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
 
-export default function ArchiveAlertDialog({sessionId, setMessages}) {
+export default function ArchiveAlertDialog({sessionId, setMessages, problemSlug}) {
 
   const handleArchiveConversation = async () => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/archive/`,
-      { sessionId: sessionId }
+      { sessionId: sessionId, problemSlug: problemSlug }
     );
     if (response.status === 200) {
       console.log("Conversation archived");

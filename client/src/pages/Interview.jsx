@@ -10,8 +10,10 @@ import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/common/Navbar";
 import { Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
+
+
+
 export default function Interview({ user, isLoading }) {
   const { theme } = useHomeTheme();
   const [code, setCode] = useState("print('Hello, World!')");
@@ -28,6 +30,8 @@ export default function Interview({ user, isLoading }) {
     );
     setSelectedProblem(response.data.question);
   };
+
+
 
   useEffect(() => {
     if (!user && !isLoading) {
