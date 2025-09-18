@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { useHomeTheme } from "@/context/HomeThemeContext";
 import DefaultButton from "@/components/common/DefaultButton";
 
-export default function QuestionSelector({ questions, setQuestions }) {
+export default function QuestionSelector({ setQuestions }) {
   const [search, setSearch] = useState("");
-  const { theme } = useHomeTheme();
+  
+  //Fetch questions and update questions state
   const fetchQuestions = async () => {
+    //search.route.js
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/search?keyword=${search}`
     );

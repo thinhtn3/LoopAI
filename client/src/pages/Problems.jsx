@@ -16,19 +16,18 @@ export default function Home() {
     }
   }, [user]);
 
-  return (
-    user ? (
+  return user ? (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-[var(--home-bg)]">
       <Navbar />
       <div className="w-full h-full flex flex-col items-center justify-center">
-        <QuestionSelector questions={questions} setQuestions={setQuestions} />
+        <QuestionSelector setQuestions={setQuestions} />
         <ProblemSet questions={questions} />
       </div>
     </div>
-    ) : (
-      <div>
-        <h1>You are not authenticated</h1>
-      </div>
-    )
+  ) : (
+    //bad request
+    <div>
+      <h1>You are not authenticated</h1>
+    </div>
   );
 }

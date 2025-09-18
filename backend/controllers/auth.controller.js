@@ -1,10 +1,10 @@
 import { HTTP_STATUS_CODES } from "../constants/index.js";
 import { createSession, getSession } from "../services/sessions.service.js";
 import { supabase } from "../lib/supabase.js";
+import prisma from "../config/database.js";
 
 //Create or return session for a user (a session is a conversation with a problem)
 export const authController = async (req, res) => {
-
   const { problemSlug } = req.body;
   const token = req.cookies["sb-access-token"];
   if (!token) {
@@ -22,8 +22,7 @@ export const authController = async (req, res) => {
     return res.status(HTTP_STATUS_CODES.SUCCESS);
   }
 
-  return res
-    .status(HTTP_STATUS_CODES.SUCCESS);
+  return res.status(HTTP_STATUS_CODES.SUCCESS);
 };
 
 //Sign in a user with email and password, then set cookies
@@ -34,7 +33,7 @@ export const signinController = async (req, res) => {
     password,
   });
   if (error) {
-    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: error.message });
+    return res.status(error.status).json({ message: error.message });
   }
   //set cookies: store access token in cookies to authenticate user and prevent CSRF attacks
   res.cookie("sb-access-token", data.session.access_token, {
@@ -51,12 +50,27 @@ export const signinController = async (req, res) => {
   return res.status(HTTP_STATUS_CODES.SUCCESS).json({ user: data.user });
 };
 
+//Sign up a user with email and password
+export const signupController = async (req, res) => {
+  const { email, password } = req.body;
+  //TODO: ADD VALIDATION FOR EMAIL AND PASSWORD (NO DUPLICATE EMAILS)
+
+  //sign up user with supabase
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+  if (error) {
+    return res
+      .status(HTTP_STATUS_CODES.BAD_REQUEST)
+      .json({ message: error.message });
+  }
+  return res.status(HTTP_STATUS_CODES.SUCCESS).json({ user: data.user });
+};
+
 //Logout a user by clearing cookies
 export const logoutController = async (req, res) => {
   const { data, error } = await supabase.auth.signOut();
-  if (error) {
-    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: error.message });
-  }
   res.clearCookie("sb-access-token");
   res.clearCookie("sb-refresh-token");
   return res.status(HTTP_STATUS_CODES.SUCCESS).json({ message: "Logged out" });
@@ -67,11 +81,15 @@ export const meController = async (req, res) => {
   const token = req.cookies["sb-access-token"];
   if (!token) {
     console.log("No token found");
-    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: "User ID is required" });
+    return res
+      .status(HTTP_STATUS_CODES.BAD_REQUEST)
+      .json({ message: "User ID is required" });
   }
   const { data, error } = await supabase.auth.getUser(token);
   if (error) {
-    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: error.message });
+    return res
+      .status(HTTP_STATUS_CODES.BAD_REQUEST)
+      .json({ message: error.message });
   }
   return res.status(HTTP_STATUS_CODES.SUCCESS).json({ user: data.user });
 };

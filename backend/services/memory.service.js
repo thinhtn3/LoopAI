@@ -1,6 +1,8 @@
+//** Services to get and delete history from Message table **/
+
 import { InMemoryChatMessageHistory } from "@langchain/core/chat_history";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
 import prisma from "../config/database.js";
+import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
 //Get the history of messages for a given sessionId
 export async function getHistory(sessionId) {
@@ -30,15 +32,15 @@ export async function getHistory(sessionId) {
     }
   });
 
-  // Differentiate between user and model messages (Human Message and AIMessage are classes)
+  // Differentiate between user and model messages (Human Message and AIMessage are classes) <- NOT USED NOTE
   // console.log("History:", history.messages[0] instanceof HumanMessage);
   // console.log("History:", history.messages[1] instanceof AIMessage);
-  
 
   //Return the InMemoryChatMessageHistory for the given sessionId, if it exists, return the existing one
   return history;
 }
 
+//Delete all messages from Message table for a given sessionId
 export async function deleteCurrentHistory(sessionId) {
   const deletedHistory = await prisma.message.deleteMany({
     where: { sessionId },

@@ -9,7 +9,14 @@ import usePushToTalk from "@/hooks/usePushToTalk";
 import { Mic, MicOff, Plus } from "lucide-react";
 import { Resizable } from "re-resizable";
 
-export default function Chatbox({ code, question, user, problemSlug, messages, setMessages }) {
+export default function Chatbox({
+  code,
+  question,
+  user,
+  problemSlug,
+  messages,
+  setMessages,
+}) {
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef(null);
@@ -17,7 +24,30 @@ export default function Chatbox({ code, question, user, problemSlug, messages, s
     usePushToTalk();
 
   //Search for history of messages in supabase
+  useEffect(() => {
+    if (!problemSlug) return;
+    const controller = new AbortController();
 
+    const url = `${import.meta.env.VITE_API_URL}/api/chat/history`;
+    console.log("history start", { problemSlug, url });
+
+    axios
+      .get(url, {
+        withCredentials: true,
+        params: { problemSlug },
+      })
+      .then((res) => {
+        console.log("history ok", res.status);
+        if (res.status === 200) {
+          setMessages(res.data.history);
+        }
+      })
+      .catch((err) => {
+        console.error("history error", err?.response?.status, err?.message);
+      });
+
+    return () => controller.abort();
+  }, [problemSlug]);
 
   //Scroll to bottom of chat box when new messages are added
   useEffect(() => {

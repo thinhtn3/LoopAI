@@ -23,8 +23,10 @@ export default function SignIn({ setShowSignUp }) {
 
   const handleSignIn = async () => {
     const loggedIn = await login(email, password);
-    if (loggedIn) {
+    if (loggedIn.ok || user) {
       navigate("/problems");
+    } else {
+      setError(loggedIn.message);
     }
   };
   const handleClick = () => {
@@ -33,18 +35,12 @@ export default function SignIn({ setShowSignUp }) {
 
   return (
     <div className="w-1/6">
-        <button
-        style={{ backgroundColor: "red" }}
-         onClick={async () => {
-            await fetchMe();
-            console.log(user);
-        }}>Fetch Me</button>
-
       <Card className="bg-[var(--home-surface)] border-[var(--home-border)] text-[var(--home-text)]">
         <CardHeader className="flex justify-center">
           <CardTitle>Sign In</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-6">
+          {/* Email Input */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -56,6 +52,8 @@ export default function SignIn({ setShowSignUp }) {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
+          {/* Password Input */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -68,6 +66,8 @@ export default function SignIn({ setShowSignUp }) {
             />
           </div>
           {error && <p className="text-[var(--home-error)]">{error}</p>}
+
+          {/* Sign Up Link */}
           <p>
             No account?{" "}
             <span
@@ -77,6 +77,8 @@ export default function SignIn({ setShowSignUp }) {
               Sign Up
             </span>
           </p>
+
+          {/* Sign In Button */}
           <DefaultButton
             className="bg-[var(--home-accent)] text-[var(--home-accentText)] border border-[var(--home-border)] transition-all duration-150 hover:bg-[var(--home-accentHover)]"
             onClick={handleSignIn}

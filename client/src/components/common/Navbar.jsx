@@ -8,7 +8,6 @@ export default function Navbar() {
   const links = [
     { to: "/", label: "Home" },
     { to: "/problems", label: "Problems" },
-    // { to: "/interview", label: "Interview" },
   ];
 
   const linkClass = ({ isActive }) =>
@@ -28,6 +27,7 @@ export default function Navbar() {
   return (
     <header className="bg-[var(--home-surface)] border-b border-[var(--home-border)] w-[100vw] xl:text-lg 2xl:text-xl">
       <div className="flex items-center justify-between px-8">
+        {/* Logo */}
         <NavLink className="flex items-center" to="/">
           <img
             src="/src/assets/icon.png"
@@ -37,20 +37,23 @@ export default function Navbar() {
           <h1 className="font-bold text-[var(--home-accentAlt)]">LoopAI</h1>
         </NavLink>
 
+        {/* Navigation Links */}
         <div>
           <nav className="flex items-center gap-2">
-              {links.map((l) => (
-                <NavLink
-                  key={l.to}
-                  to={l.to}
-                  className={linkClass}
-                  end={l.to === "/"}
-                >
-                  {l.label}
-                </NavLink>
-              ))}
-            </nav>
+            {links.map((l) => (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                className={linkClass}
+                end={l.to === "/"}
+              >
+                {l.label}
+              </NavLink>
+            ))}
+          </nav>
         </div>
+
+        {/* Login/Logout Button */}
         <div className="flex items-center gap-2">
           {user ? (
             <button
@@ -65,7 +68,6 @@ export default function Navbar() {
             </NavLink>
           )}
         </div>
-
       </div>
     </header>
   );

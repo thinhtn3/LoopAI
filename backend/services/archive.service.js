@@ -1,11 +1,10 @@
-//Archive a conversation by calling session.service.js to get session then memory.service.js to get history then create a new archived conversation, then delete the session
-//after storing the archived conversation, delete the session
+//** Services to archive a conversation by storing all messages in JSON object and then upserting to ArchivedConversation table **/
 
 import { getHistory } from "./memory.service.js";
 import prisma from "../config/database.js";
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
-import { v4 as uuidv4 } from "uuid";
 
+//Archiving a conversation by storing all messages in JSON object and then upserting to ArchivedConversation table
 export const archiveConversation = async (sessionId, problemSlug) => {
     const history = await getHistory(sessionId);
   
@@ -15,7 +14,7 @@ export const archiveConversation = async (sessionId, problemSlug) => {
     });
     const userId = session.userId;
   
-    // transform messages into { role, content }
+    // transform messages into { role, content } json object
     const data = history.messages.map((message) => ({
       role: message instanceof HumanMessage ? "user" : "model",
       content: message.content,

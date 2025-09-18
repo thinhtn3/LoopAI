@@ -26,7 +26,9 @@ export default function QuestionDisplay({ selectedProblem }) {
     <div className="h-full flex flex-col bg-[var(--home-surface)] gap-y-2 p-4">
       <div className="flex-shrink-0">
         <div className="flex items-center gap-2 mb-2">
-          <h3 className="xl:text-xl 2xl:text-2xl font-bold">{selectedProblem.title}</h3>
+          <h3 className="xl:text-xl 2xl:text-2xl font-bold">
+            {selectedProblem.title}
+          </h3>
           <Badge
             className={getDifficultyColor(
               selectedProblem.difficulty.toLowerCase()
@@ -52,7 +54,9 @@ export default function QuestionDisplay({ selectedProblem }) {
           {/* Examples */}
           {selectedProblem.examples && (
             <div className="w-full bg-[var(--home-surface)] border-0">
-              <h4 className="font-semibold mb-2 xl:text-sm 2xl:text-lg">Examples</h4>
+              <h4 className="font-semibold mb-2 xl:text-sm 2xl:text-lg">
+                Examples
+              </h4>
               {selectedProblem.examples.map((ex, idx) => (
                 <Card
                   key={idx}
@@ -65,8 +69,7 @@ export default function QuestionDisplay({ selectedProblem }) {
                     <div>
                       {Object.entries(ex.input).map(([key, value]) => (
                         <p key={key}>
-                          {key}:{" "}
-                          {formatWithCommaSpace(value)}
+                          {key}: {formatWithCommaSpace(value)}
                         </p>
                       ))}
                     </div>

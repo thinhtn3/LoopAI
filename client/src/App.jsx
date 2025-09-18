@@ -12,9 +12,9 @@ export default function App() {
     <HomeThemeProvider>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/auth" element={<Auth />} />
         <Route path="/problems" element={<Problems  />} />
         <Route path="/interview" element={<Interview  />} />
-        <Route path="/auth" element={<Auth />} />
       </Routes>
     </HomeThemeProvider>
   );

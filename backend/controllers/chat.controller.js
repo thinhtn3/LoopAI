@@ -51,15 +51,15 @@ const getSessionController = async (req, res) => {
 
 /** Call getHistory service to GET history of messages from database **/
 const getHistoryController = async (req, res) => {
-  console.log("getHistoryController");
   const { problemSlug } = req.query;
   const token = req.cookies["sb-access-token"];
-  console.log("token", token);
   const { data, error } = await supabase.auth.getUser(token);
   const userId = data.user.id;
   const session = await getSession(userId, problemSlug);
+  if (!session) {
+    return res.status(HTTP_STATUS_CODES.NOT_FOUND).json({ message: "Session not found" });
+  }
   const sessionId = session.id;
-  console.log("sessionId", sessionId, "problemSlug", problemSlug);
 
   const history = await getHistory(sessionId); //returns InMemoryChatMessageHistory object
 

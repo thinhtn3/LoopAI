@@ -1,8 +1,11 @@
+
+//** Services to create, get and delete from Session table **/
+
 import { v4 as uuidv4 } from "uuid";
 import prisma from "../config/database.js";
-//Create or update a session if exist
+//Create or update a session if exist in Session table
 export async function createSession(userId, problemSlug) {
-    //upsert = update or insert
+  //upsert = update or insert
   const newSession = await prisma.session.upsert({
     where: {
       userId_problemSlug: {
@@ -23,7 +26,7 @@ export async function createSession(userId, problemSlug) {
   return newSession;
 }
 
-//get session by userId and return session
+//Get session from Session table by userId and problemSlug
 export async function getSession(userId, problemSlug) {
   const session = await prisma.session.findUnique({
     where: {
@@ -37,6 +40,7 @@ export async function getSession(userId, problemSlug) {
   return session;
 }
 
+//Delete a session from Session table
 export async function deleteSession(sessionId) {
   const deletedSession = await prisma.session.delete({
     where: { id: sessionId },

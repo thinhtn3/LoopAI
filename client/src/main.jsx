@@ -8,7 +8,7 @@ import "./index.css";
 import "@fontsource/geist-sans";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <HomeThemeProvider>
         <AuthProvider>
@@ -16,5 +16,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </AuthProvider>
       </HomeThemeProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

@@ -7,13 +7,12 @@ import { useEffect } from "react";
 
 export default function Landing() {
 
-  const { user } = useAuth();
 
   return (
     <div className="w-screen h-screen bg-[var(--home-bg)]">
       <Navbar />
       <div>
-        <Hero user={user} />
+        <Hero />
         <FeaturesGrid />
       </div>
     </div>

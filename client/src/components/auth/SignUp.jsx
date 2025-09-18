@@ -1,11 +1,9 @@
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/supabaseClient";
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { useHomeTheme } from "@/context/HomeThemeContext";
 import DefaultButton from "../common/DefaultButton";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "../../hooks/useAuth.jsx";
 
 
 export default function SignUp({ setShowSignUp }) {
@@ -15,31 +13,21 @@ export default function SignUp({ setShowSignUp }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    
+    const { signup } = useAuth();
+    const [error, setError] = useState("");
+
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
-            console.error("Passwords do not match");
+            setError("Passwords do not match");
             return;
         }
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    firstName,
-                    lastName,
-                    displayName,
-                },
-            },
-        });
-        if (error) {
-            //TODO: Add error message for existing email
-            console.error(error);
-        } else {
-            console.log("Successfully signed up");
+        const signedUp = await signup(email, password);
+        if (signedUp.ok) {
             setShowSignUp(false);
+        } else {
+            setError(signedUp.message);
         }
-    }   
+    }
 
     const handleClick = () => {
         setShowSignUp(false);
@@ -79,6 +67,7 @@ export default function SignUp({ setShowSignUp }) {
                         <Input id="confirmPassword" className="border-1 border-[var(--home-border)] bg-[var(--home-bg)]" type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                     </div>
                     <p>Already have an account? <span className="text-[var(--home-accent)] cursor-pointer" onClick={handleClick}>Sign In</span></p>
+                    {error && <p className="text-red-500">{error}</p>}
                     <DefaultButton className="bg-[var(--home-accent)] text-[var(--home-accentText)] border border-[var(--home-border)] transition-all duration-150 hover:bg-[var(--home-accentHover)]" onClick={handleSignUp}>Sign up</DefaultButton>
                 </CardContent>
             </Card>
