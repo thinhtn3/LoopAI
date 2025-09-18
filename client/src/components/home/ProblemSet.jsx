@@ -7,13 +7,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useHomeTheme } from "@/context/HomeThemeContext";
+import { useEffect } from "react";
 import { getDifficultyColor } from "@/constants/difficultyColor";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "../../lib/supabaseClient";
+
 
 
 export default function ProblemSet({ questions }) {
-  const { theme } = useHomeTheme();
+
   return (
     <div className="w-1/2 flex flex-col items-center justify-center gap-y-6 py-4">
       {questions.map((question) => (

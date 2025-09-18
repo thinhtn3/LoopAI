@@ -4,10 +4,14 @@ import { geminiChat } from "../services/chat.service.js";
 import { getSession, createSession } from "../services/sessions.service.js";
 import { getHistory } from "../services/memory.service.js";
 import { HumanMessage } from "@langchain/core/messages";
+import { supabase } from "../lib/supabase.js";
 
 /** Extract, validate, and call geminiChat service **/
 const chatController = async (req, res) => {
-  const { userMessage, userId, userCode, question, problemSlug } = req.body;
+  const { userMessage, userCode, question, problemSlug } = req.body;
+  const token = req.cookies["sb-access-token"];
+  const { data, error } = await supabase.auth.getUser(token);
+  const userId = data.user.id;
 
   if (!userMessage) {
     return res.status(400).json({ message: "User message is required" });
@@ -47,7 +51,15 @@ const getSessionController = async (req, res) => {
 
 /** Call getHistory service to GET history of messages from database **/
 const getHistoryController = async (req, res) => {
-  const { sessionId } = req.query;
+  console.log("getHistoryController");
+  const { problemSlug } = req.query;
+  const token = req.cookies["sb-access-token"];
+  console.log("token", token);
+  const { data, error } = await supabase.auth.getUser(token);
+  const userId = data.user.id;
+  const session = await getSession(userId, problemSlug);
+  const sessionId = session.id;
+  console.log("sessionId", sessionId, "problemSlug", problemSlug);
 
   const history = await getHistory(sessionId); //returns InMemoryChatMessageHistory object
 
@@ -57,6 +69,7 @@ const getHistoryController = async (req, res) => {
     content: message.content,
   }));
 
+  console.log("chatHistory", chatHistory);
   //return chatHistory to be rendered in the chatbox
   return res.status(HTTP_STATUS_CODES.SUCCESS).json({ history: chatHistory });
 };

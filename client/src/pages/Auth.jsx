@@ -5,22 +5,24 @@ import logo from "@/assets/icon.png";
 import Navbar from "@/components/common/Navbar";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth.jsx";
 
 
-export default function Auth({ user, isLoading }) {
+export default function Auth() {
   const [showSignUp, setShowSignUp] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     //If user is authenticated, redirect to problems
-    if (user && !isLoading) {
+    if (user) {
       navigate("/problems");
     }
-  }, [user, isLoading]);
+  }, [user]);
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-between bg-[var(--home-bg)]">
-      <Navbar user={user} isLoading={isLoading} />
+      <Navbar />
 
       <div className="h-full w-full flex flex-col items-center justify-center gap-4">
         <div className="flex items-center">
@@ -39,7 +41,7 @@ export default function Auth({ user, isLoading }) {
               : "Sign in to your account to continue"}
           </p>
         </div>
-        {showSignUp ? <SignUp setShowSignUp={setShowSignUp} user={user} isLoading={isLoading} /> : <SignIn setShowSignUp={setShowSignUp} user={user} isLoading={isLoading} />}
+        {showSignUp ? <SignUp setShowSignUp={setShowSignUp} /> : <SignIn setShowSignUp={setShowSignUp} />}
       </div>
     </div>
   );

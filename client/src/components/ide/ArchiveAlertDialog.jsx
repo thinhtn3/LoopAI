@@ -13,20 +13,20 @@ import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton";
 
 export default function ArchiveAlertDialog({
-  sessionId,
   setMessages,
   problemSlug,
 }) {
   const handleArchiveConversation = async () => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/archive/`,
-      { sessionId: sessionId, problemSlug: problemSlug }
+      { problemSlug: problemSlug },
+      { withCredentials: true }
     );
     if (response.status === 200) {
       console.log("Conversation archived");
       const deletedSession = await axios.delete(
         `${import.meta.env.VITE_API_URL}/archive/`,
-        { params: { sessionId: sessionId } }
+        { withCredentials: true, params: { problemSlug } },
       );
       if (deletedSession.status === 200) {
         console.log("Session deleted");
@@ -39,7 +39,7 @@ export default function ArchiveAlertDialog({
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <DefaultButton className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg">
           New Chat
         </DefaultButton>

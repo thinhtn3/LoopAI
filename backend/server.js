@@ -6,10 +6,16 @@ import chatRoutes from "./routes/chat.route.js";
 import searchRoutes from "./routes/search.route.js";
 import authRoutes from "./routes/auth.route.js";
 import archiveRoutes from "./routes/archive.route.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
-app.use(cors());
+//allow cors from 5173
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 app.use(express.json())
+app.use(cookieParser())
 
 
 //Routes
@@ -20,5 +26,5 @@ app.use("/archive", archiveRoutes);
 
 app.use(errorHandler);
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`API running on http://localhost:${port}`));

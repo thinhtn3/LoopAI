@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useInterviewTheme } from "@/context/InterviewThemeContext";
+// import { useInterviewTheme } from "@/context/InterviewThemeContext";
 
 export default function DefaultButton({
   children,
@@ -16,7 +16,7 @@ export default function DefaultButton({
   asChild = false,
   ...props
 }) {
-  const { theme } = useInterviewTheme();
+  // const { theme } = useInterviewTheme();
 
   const handleClick = (e) => {
     if (onClick && !loading && !disabled) {

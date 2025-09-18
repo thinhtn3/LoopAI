@@ -7,7 +7,7 @@ import { Safari } from "@/components/magicui/safari";
 import demo from "@/assets/demo1.png";
 import { NeonGradientCard } from "@/components/magicui/neon-gradient-card";
 
-export default function Hero({ user, isLoading }) {
+export default function Hero({ user }) {
   const { theme } = useHomeTheme();
   return (
     <section

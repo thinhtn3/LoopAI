@@ -8,29 +8,34 @@ import { v4 as uuidv4 } from "uuid";
 
 export const archiveConversation = async (sessionId, problemSlug) => {
     const history = await getHistory(sessionId);
-    //get userId from session
+  
+    // get userId from session
     const session = await prisma.session.findUnique({
-        where: {
-            id: sessionId,
-        },
+      where: { id: sessionId },
     });
     const userId = session.userId;
-    const data = [];
-    history.messages.forEach((message) => {
-        data.push({
-            role: message instanceof HumanMessage ? "user" : "model",
-            content: message.content,
-        });
+  
+    // transform messages into { role, content }
+    const data = history.messages.map((message) => ({
+      role: message instanceof HumanMessage ? "user" : "model",
+      content: message.content,
+    }));
+  
+    // Use upsert to avoid unique constraint crash
+    const archivedConversation = await prisma.archivedConversation.upsert({
+      where: { sessionId }, // unique constraint
+      update: {
+        data,         // update stored messages if already exists
+        problemSlug,  // optional: keep slug updated
+      },
+      create: {
+        sessionId,
+        userId,
+        data,
+        problemSlug,
+      },
     });
-    console.log("data", data);
-
-    const archivedConversation = await prisma.archivedConversation.create({
-        data: { 
-            sessionId,
-            userId,
-            data,
-            problemSlug,
-        },
-    });
+  
     return archivedConversation;
-};
+  };
+  

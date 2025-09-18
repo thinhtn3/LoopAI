@@ -9,43 +9,15 @@ import usePushToTalk from "@/hooks/usePushToTalk";
 import { Mic, MicOff, Plus } from "lucide-react";
 import { Resizable } from "re-resizable";
 
-export default function Chatbox({ code, question, user, problemSlug }) {
+export default function Chatbox({ code, question, user, problemSlug, messages, setMessages }) {
   const [userInput, setUserInput] = useState("");
-  const [messages, setMessages] = useState([
-    "Type here to start a conversation with LoopAI!",
-  ]);
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId"));
   const bottomRef = useRef(null);
   const { listening, transcript, startListening, stopListening } =
     usePushToTalk();
 
   //Search for history of messages in supabase
-  useEffect(() => {
-    const searchHistory = async () => {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/chat/history`,
-        {
-          params: {
-            sessionId: sessionId,
-          },
-        }
-      );
-      if (response.status === 200) {
-        setMessages(response.data.history);
-      }
-    };
-    if (sessionId) {
-      searchHistory();
-    }
-  }, [sessionId]);
 
-  useEffect(() => {
-    if (transcript) {
-      console.log("Transcript: ", transcript);
-      setUserInput(transcript);
-    }
-  }, [transcript]);
 
   //Scroll to bottom of chat box when new messages are added
   useEffect(() => {
@@ -54,7 +26,6 @@ export default function Chatbox({ code, question, user, problemSlug }) {
 
   const handleSendMessage = async () => {
     if (!userInput.trim() || isLoading) return;
-    setIsLoading(true);
 
     //Prepare user message and add to messages state for display
     const userMessage = {
@@ -68,16 +39,15 @@ export default function Chatbox({ code, question, user, problemSlug }) {
     setUserInput("");
     setIsLoading(true);
     try {
-      console.log(user);
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/chat/`,
         {
           userMessage: userInput,
-          userId: user.id,
           userCode: code,
           question: question,
           problemSlug: problemSlug,
-        }
+        },
+        { withCredentials: true }
       );
 
       //If response is successful, prepare model response and add to messages state for display
@@ -87,9 +57,6 @@ export default function Chatbox({ code, question, user, problemSlug }) {
           content: response.data.response,
         };
         setMessages((prev) => [...prev, modelMessage]);
-        if (!sessionId && response.data.sessionId) {
-          setSessionId(response.data.sessionId);
-        }
       } else {
         console.error("No response from API");
       }
@@ -105,7 +72,6 @@ export default function Chatbox({ code, question, user, problemSlug }) {
       <div className="flex justify-between items-end border-1 border-t border-[var(--home-border)] p-4">
         <h2 className="text-lg font-semibold">AI Assistant</h2>
         <ArchiveAlertDialog
-          sessionId={sessionId}
           setMessages={setMessages}
           problemSlug={problemSlug}
         />

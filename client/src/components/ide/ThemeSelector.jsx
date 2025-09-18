@@ -1,7 +1,6 @@
 import { useInterviewTheme } from '../../context/InterviewThemeContext';
 
 export default function ThemeSelector() {
-  const { currentTheme, theme, themes, setTheme, toggleTheme, setSystemThemeMode } = useInterviewTheme();
 
   return (
     <div className="flex items-center space-x-2 p-2 bg-surface border border-border rounded-md">

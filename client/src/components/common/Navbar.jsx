@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { useHomeTheme } from "@/context/HomeThemeContext";
-import { supabase } from "@/lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth.jsx";
 
-export default function Navbar({ user, isLoading }) {
+export default function Navbar() {
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
   const links = [
     { to: "/", label: "Home" },
@@ -20,12 +20,7 @@ export default function Navbar({ user, isLoading }) {
     ].join(" ");
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error(error);
-      return;
-    }
-    localStorage.removeItem("user");
+    await logout();
     console.log("Logged out");
     navigate("/");
   };
@@ -56,9 +51,8 @@ export default function Navbar({ user, isLoading }) {
               ))}
             </nav>
         </div>
-
         <div className="flex items-center gap-2">
-          {user && !isLoading ? (
+          {user ? (
             <button
               className="px-3 py-2 rounded-md xl:text-sm 2xl:text-lg font-medium text-[var(--home-text)] hover:bg-[var(--home-border)]"
               onClick={handleLogout}

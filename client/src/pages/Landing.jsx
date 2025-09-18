@@ -2,12 +2,16 @@ import Hero from "@/components/landing/Hero";
 import Navbar from "@/components/common/Navbar";
 import FeaturesGrid from "@/components/landing/FeaturesGrid";
 // import HowItWorks from '@/components/home/HowItWorks';
-import FooterCta from "@/components/landing/FooterCta";
+import { useAuth } from "@/hooks/useAuth.jsx";
+import { useEffect } from "react";
 
-export default function Landing({ user }) {
+export default function Landing() {
+
+  const { user } = useAuth();
+
   return (
     <div className="w-screen h-screen bg-[var(--home-bg)]">
-      <Navbar user={user} />
+      <Navbar />
       <div>
         <Hero user={user} />
         <FeaturesGrid />

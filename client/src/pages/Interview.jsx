@@ -11,50 +11,79 @@ import Navbar from "@/components/common/Navbar";
 import { Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Resizable } from "re-resizable";
+import { useAuth } from "@/hooks/useAuth.jsx";
 import axios from "axios";
 
-export default function Interview({ user, isLoading }) {
+export default function Interview() {
   const { theme } = useHomeTheme();
   const [code, setCode] = useState("print('Hello, World!')");
   const [output, setOutput] = useState("");
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const slug = searchParams.get("slug");
+  const problemSlug = searchParams.get("slug");
   const ranRef = useRef(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [messages, setMessages] = useState([]);
+
 
   const fetchQuestion = async () => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${slug}`
+      `${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${problemSlug}`
     );
     setSelectedProblem(response.data.question);
   };
 
   useEffect(() => {
-    if (!user && !isLoading) {
+    if (!user) {
       navigate("/auth");
     }
-  }, [user, isLoading]);
+  }, [user]);
+
+  useEffect(() => {
+    console.log("useEffect");
+    if (!problemSlug) return;
+
+    const url = `${import.meta.env.VITE_API_URL}/api/chat/history`;
+    console.log("history start", { problemSlug, url });
+
+    axios
+      .get(url, {
+        withCredentials: true,
+        params: { problemSlug },
+      })
+      .then((res) => {
+        console.log("history ok", res.status);
+        if (res.status === 200) {
+          setMessages(res.data.history);
+        }
+      })
+      .catch((err) => {
+        console.error("history error", err?.response?.status, err?.message);
+      });
+  }, [problemSlug]);
 
   useEffect(() => {
     const fetchSessionId = async () => {
       if (!user) return;
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/`,
-        { userId: user.id, problemSlug: slug }
+        { problemSlug: problemSlug },
+        { withCredentials: true }
       );
       if (response.status === 200) {
-        localStorage.setItem("sessionId", response.data.session);
+        console.log("Session id fetched");
       } else {
-        console.error("Error fetching session id");
+        console.log("Error fetching session id");
       }
     };
     fetchSessionId();
-  }, [user]);
+  }, [problemSlug]);
 
   useEffect(() => {
-    if (ranRef.current) return;
-    ranRef.current = true;
+    // if (ranRef.current) return;
+    // ranRef.current = true;
+    if (!problemSlug) return;
     fetchQuestion();
   }, []);
 
@@ -156,10 +185,13 @@ export default function Interview({ user, isLoading }) {
           <div className="flex-1 min-h-0">
             {selectedProblem ? (
               <Chatbox
+                key={`${problemSlug}`}
                 code={code}
                 question={selectedProblem}
                 user={user}
-                problemSlug={slug}
+                problemSlug={problemSlug}
+                messages={messages}
+                setMessages={setMessages}
               />
             ) : (
               <div className="flex-1 flex items-center justify-center">
