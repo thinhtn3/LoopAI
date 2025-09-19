@@ -1,11 +1,11 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useRef, useEffect } from "react";
-import ArchiveAlertDialog from "./ArchiveAlertDialog";
-import ChatBubble from "./ChatBubble";
+import ArchiveAlertDialog from "./ArchiveAlertDialog.jsx";
+import ChatBubble from "./ChatBubble.jsx";
 import axios from "axios";
-import DefaultButton from "@/components/common/DefaultButton";
-import usePushToTalk from "@/hooks/usePushToTalk";
+import DefaultButton from "@/components/common/DefaultButton.jsx";
+import usePushToTalk from "@/hooks/usePushToTalk.jsx";
 import { Mic, MicOff, Plus } from "lucide-react";
 import { Resizable } from "re-resizable";
 

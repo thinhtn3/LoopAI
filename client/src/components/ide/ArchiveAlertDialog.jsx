@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
-import DefaultButton from "@/components/common/DefaultButton";
+import DefaultButton from "@/components/common/DefaultButton.jsx";
 
 export default function ArchiveAlertDialog({
   setMessages,

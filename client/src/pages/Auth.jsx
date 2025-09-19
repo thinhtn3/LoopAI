@@ -1,8 +1,8 @@
 import { useState } from "react";
-import SignIn from "@/components/auth/signIn";
-import SignUp from "@/components/auth/signUp";
+import SignIn from "@/components/auth/signIn.jsx";
+import SignUp from "@/components/auth/signUp.jsx";
 import logo from "@/assets/icon.png";
-import Navbar from "@/components/common/Navbar";
+import Navbar from "@/components/common/Navbar.jsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth.jsx";
