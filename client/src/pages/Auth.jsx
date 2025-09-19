@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SignIn from "@/components/auth/signIn.jsx";
-import SignUp from "@/components/auth/signUp.jsx";
+import SignIn from "@/components/auth/SignIn.jsx";
+import SignUp from "@/components/auth/SignUp.jsx";
 import logo from "@/assets/icon.png";
 import Navbar from "@/components/common/Navbar.jsx";
 import { useNavigate } from "react-router-dom";
