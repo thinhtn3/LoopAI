@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth.jsx";
+import logo from "@/assets/icon.png";
 
 export default function Navbar() {
   const { logout, user } = useAuth();
@@ -30,7 +31,7 @@ export default function Navbar() {
         {/* Logo */}
         <NavLink className="flex items-center" to="/">
           <img
-            src="/src/assets/icon.png"
+            src={logo}
             alt="LoopAI"
             className="sm:w-5 lg:w-5 xl:w-15 2xl:w-20"
           />

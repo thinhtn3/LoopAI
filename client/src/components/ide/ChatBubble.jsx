@@ -1,9 +1,7 @@
 import React from "react";
-import { useHomeTheme } from "../../context/HomeThemeContext";
+import { useHomeTheme } from "../../context/HomeThemeContext.jsx";
+import { formatContent } from "../../utils/formatBacktick.jsx";
 
-// Basic chat bubble component for Interview theme
-// role: "user" | "assistant"
-// props: { role, content, timestamp }
 export default function ChatBubble({ role, content, timestamp }) {
   const isUser = role === "user";
   const { theme } = useHomeTheme();
@@ -12,12 +10,10 @@ export default function ChatBubble({ role, content, timestamp }) {
     backgroundColor: isUser ? theme.colors.bg : theme.colors.bg,
     color: isUser ? "#ffffff" : theme.colors.codeText,
     borderColor: isUser ? theme.colors.border : theme.colors.border,
-    // boxShadow: theme.shadows.sm,
   };
 
-  const timeStyle = {
-    color: isUser ? "#e5f0ff" : theme.colors.textSecondary,
-  };
+  const timeStyle = { color: isUser ? "#e5f0ff" : theme.colors.textSecondary };
+
 
   return (
     <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
@@ -25,7 +21,7 @@ export default function ChatBubble({ role, content, timestamp }) {
         className="max-w-[80%] rounded-xl px-3 py-2 xl:text-xs 2xl:text-sm shadow-sm border"
         style={bubbleStyle}
       >
-        <p className="whitespace-pre-wrap leading-relaxed">{content}</p>
+        <p className="whitespace-pre-wrap leading-relaxed">{formatContent(content)}</p>
         {timestamp && (
           <p className="mt-1" style={timeStyle}>
             {new Date(timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -35,5 +31,3 @@ export default function ChatBubble({ role, content, timestamp }) {
     </div>
   );
 }
-
-

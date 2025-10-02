@@ -20,8 +20,7 @@ export default function Chatbox({
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef(null);
-  const { listening, transcript, startListening, stopListening } =
-    usePushToTalk();
+  const { listening, transcript, startListening, stopListening } = usePushToTalk();
 
   //Search for history of messages in supabase
   useEffect(() => {
@@ -53,6 +52,12 @@ export default function Chatbox({
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+  // When listening stops, append transcript to the current input
+  useEffect(() => {
+    if (!listening && transcript) {
+      setUserInput((prev) => (prev ? `${prev} ${transcript}`.trim() : transcript));
+    }
+  }, [listening, transcript]);
 
   const handleSendMessage = async () => {
     if (!userInput.trim() || isLoading) return;
@@ -65,7 +70,7 @@ export default function Chatbox({
     };
     setMessages((prev) => [...prev, userMessage]);
 
-    //Send message to /api/chat endpoint (post request)
+    //Send message to /api/chat endpoint (post request) along with user code and question to LLM
     setUserInput("");
     setIsLoading(true);
     try {

@@ -25,6 +25,7 @@ export default function Interview() {
 
   //Fetch question from database after paraphrasing
   const fetchQuestion = async () => {
+    // Calls paraphrase service then rendering the question after paraphrase
     // const response = await axios.get(
     //   `${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${problemSlug}`
     // );
