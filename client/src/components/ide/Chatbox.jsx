@@ -1,7 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useRef, useEffect } from "react";
-import ArchiveAlertDialog from "./ArchiveAlertDialog.jsx";
+import ArchiveAlertDialog from "./NewChatAlertDialog.jsx";
 import ChatBubble from "./ChatBubble.jsx";
 import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton.jsx";
@@ -104,8 +104,8 @@ export default function Chatbox({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex justify-between items-end border-1 border-t border-[var(--home-border)] p-4">
-        <h2 className="text-lg font-semibold">AI Assistant</h2>
+      <div className="flex justify-between items-end p-5">
+        <h2 className="2xl:text-lg text-sm font-semibold">Loop Assist</h2>
         <ArchiveAlertDialog
           setMessages={setMessages}
           problemSlug={problemSlug}

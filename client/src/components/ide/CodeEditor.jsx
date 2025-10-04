@@ -1,11 +1,9 @@
 import Editor from "@monaco-editor/react";
-import OutputBox from "./OutputBox";
-import { useHomeTheme } from "@/context/HomeThemeContext";
 
-export default function CodeEditor({ code, setCode, output }) {
+export default function CodeEditor({ code, setCode, output, fontSize }) {
   {/* Send code to PistonAPI to be executed */}
   return (
-    <div className="flex flex-col h-full min-h-0">
+    <div className="flex flex-col h-full min-h-0 border-0">
       <div className="flex-1 min-h-0 text-xl">
         <Editor
           height="100%"
@@ -14,7 +12,7 @@ export default function CodeEditor({ code, setCode, output }) {
           onChange={(value) => setCode(value)}
           theme="vs-dark"
           options={{
-            fontSize: 16,
+            fontSize: fontSize,
             minimap: {
               enabled: false,
             },

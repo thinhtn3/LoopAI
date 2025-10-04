@@ -58,3 +58,30 @@ export const formatContent = (text) => {
     if (last < s.length) nodes.push(renderInline(s.slice(last)));
     return nodes;
   };
+
+// Render quoted strings ("..." or '...') as inline code
+const renderQuoted = (text) => {
+  const parts = [];
+  const s = String(text ?? "");
+  const re = /"([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'/g;
+  let last = 0, m;
+  while ((m = re.exec(s)) !== null) {
+    if (m.index > last) parts.push(s.slice(last, m.index));
+    const content = (m[1] ?? m[3]) ?? "";
+    parts.push(<code key={`q-${m.index}`} style={codeStyle}>{content}</code>);
+    last = m.index + m[0].length;
+  }
+  if (last < s.length) parts.push(s.slice(last));
+  return parts;
+};
+
+const quotesRe = /"([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'/;
+
+// Like formatContent, but ensures the whole string is code if unquoted
+export const formatStrings = (text) => {
+  const s = String(text ?? "");
+  if (quotesRe.test(s)) {
+    return renderQuoted(s);
+  }
+  return [<code key="str" style={codeStyle}>{s}</code>];
+};

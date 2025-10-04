@@ -4,6 +4,7 @@ import FeaturesGrid from "@/components/landing/FeaturesGrid";
 // import HowItWorks from '@/components/home/HowItWorks';
 import { useAuth } from "@/hooks/useAuth.jsx";
 import { useEffect } from "react";
+import Footer from "@/components/common/Footer";
 
 export default function Landing() {
 
@@ -14,6 +15,7 @@ export default function Landing() {
       <div>
         <Hero />
         <FeaturesGrid />
+        <Footer />
       </div>
     </div>
   );

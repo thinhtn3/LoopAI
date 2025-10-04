@@ -17,9 +17,9 @@ export default function Home() {
   }, [user]);
 
   return user ? (
-    <div className="w-screen h-screen flex flex-col items-center justify-center bg-[var(--home-bg)]">
+    <div className="w-screen h-screen flex flex-col items-center justify-between bg-[var(--home-bg)]">
       <Navbar />
-      <div className="w-full h-full flex flex-col items-center justify-center">
+      <div className="w-full h-[80%] flex flex-col items-center justify-center gap-y-6">
         <QuestionSelector setQuestions={setQuestions} />
         <ProblemSet questions={questions} />
       </div>

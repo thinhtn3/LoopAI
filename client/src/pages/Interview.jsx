@@ -5,13 +5,14 @@ import QuestionDisplay from "../components/ide/QuestionDisplay";
 import OutputBox from "../components/ide/OutputBox";
 import Navbar from "@/components/common/Navbar";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { runPython } from "../lib/handleRun";
 import { useSearchParams } from "react-router-dom";
 import { Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Resizable } from "re-resizable";
 import { useAuth } from "@/hooks/useAuth.jsx";
+import { Input } from "@/components/ui/input";
 
 export default function Interview() {
   const [code, setCode] = useState("print('Hello, World!')");
@@ -22,22 +23,24 @@ export default function Interview() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
+  const hasFetchedQuestion = useRef(false);
+  const [fontSize, setFontSize] = useState(16);
 
-  //Fetch question from database after paraphrasing
+  //Fetch question from database after calling paraphraser service from backend
   const fetchQuestion = async () => {
-    // Calls paraphrase service then rendering the question after paraphrase
-    // const response = await axios.get(
-    //   `${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${problemSlug}`
-    // );
-    // setSelectedProblem(response.data.question);
+    console.log("Fetching question for slug:", problemSlug);
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/chat/paraphrase?slug=${problemSlug}`
+    );
+    setSelectedProblem(response.data.question);
 
-    //placeholder for selected problem
-    setSelectedProblem({
-      title: "Hello",
-      description: "Hello",
-      difficulty: "Easy",
-      tags: ["Array", "String"],
-    });
+    // //placeholder for selected problem
+    // setSelectedProblem({
+    //   title: "Hello",
+    //   description: "Hello",
+    //   difficulty: "Easy",
+    //   tags: ["Array", "String"],
+    // });
   };
 
   //Redirect to auth if user is not authenticated
@@ -63,11 +66,12 @@ export default function Interview() {
     fetchSessionId();
   }, [problemSlug]);
 
-
   useEffect(() => {
     if (!problemSlug) return;
+    if (hasFetchedQuestion.current) return;
+    hasFetchedQuestion.current = true;
     fetchQuestion();
-  }, []);
+  }, [problemSlug]);
 
   const handleRunCode = async () => {
     //Pass in current code to helper function to compile Python and set output
@@ -76,13 +80,10 @@ export default function Interview() {
   };
 
   return (
-    <div
-      className="h-screen w-screen flex flex-col overflow-hidden bg-[var(--home-bg)] text-[var(--home-text)]"
-    >
+    <div className="h-screen w-screen flex flex-col overflow-hidden bg-[var(--home-bg)] text-[var(--home-text)]">
       <Navbar user={user} />
       {/* Main Content */}
       <div className="flex-1 flex min-h-0">
-
         {/* Question Display Section */}
         <Resizable
           defaultSize={{
@@ -92,7 +93,7 @@ export default function Interview() {
           minWidth="20vw"
           maxWidth="50vw"
           minHeight="100%"
-          className="flex flex-col  border-0 overflow-hidden bg-[var(--home-surface)]"
+          className="flex flex-col overflow-hidden bg-[var(--home-surface)]"
         >
           {selectedProblem ? (
             <QuestionDisplay selectedProblem={selectedProblem} />
@@ -106,29 +107,34 @@ export default function Interview() {
         </Resizable>
 
         {/* Code Editor Section */}
-        <div
-          className="flex-1 flex flex-col overflow-hidden bg-[var(--home-surface)] border border-[var(--home-border)]"
-        >
+        <div className="flex-1 flex flex-col overflow-hidden bg-[var(--home-surface)]">
           {/* Header */}
-          <div
-            className="px-4 py-3 border-b flex items-center justify-between flex-shrink-0 bg-[var(--home-surface)] border border-[var(--home-border)]"
-          >
-            <h2
-              className="text-lg font-semibold text-[var(--home-text)]"
-            >
+          <div className="2xl:p-2 lg:p-2 flex items-center justify-between flex-shrink-0 bg-[var(--home-surface)] border border-[var(--home-border)]">
+            <h2 className="2xl:text-lg lg:text-sm font-semibold text-[var(--home-text)]">
               Code Editor
             </h2>
-            <DefaultButton
-              onClick={handleRunCode}
-              className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg"
-            >
-              <Play /> Run
-            </DefaultButton>
+            <div className="flex items-center gap-2">
+              <Input
+              type="number"
+              value = {fontSize}
+              onChange={(e) => setFontSize(e.target.value)}
+              min={10}
+              max={40}
+              className="h-[70%] rounded-sm bg-[var(--home-bg)] text-[var(--home-text)] hover:bg-[var(--home-bg)] xl:text-sm 2xl:text-lg border-0 cursor-pointer"
+              />
+              <DefaultButton
+                onClick={handleRunCode}
+                className="h-[70%] rounded-sm bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg border-0 cursor-pointer"
+              >
+                <Play className="2xl:size-4 lg:size-3" />
+                <p>Run</p>
+              </DefaultButton>
+            </div>
           </div>
 
           {/* Code Editor */}
-          <div className="h-full flex flex-col min-h-0">
-            <CodeEditor code={code} setCode={setCode} output={output} />
+          <div className="h-full flex flex-col min-h-0 border-0">
+            <CodeEditor code={code} setCode={setCode} output={output} fontSize={fontSize} />
             <Resizable
               defaultSize={{ width: "100%", height: "25%" }}
               minHeight="0%"

@@ -6,6 +6,7 @@ const defaultTheme = {
   name: "Home VS Dark",
   colors: {
     bg: "#0d0d0d",        // overall page background (almost black, but softer)
+    bgHover: "#141414",
     surface: "#161616",   // card / panel background
     border: "#262626",    // subtle borders around cards & nav
     text: "#f5f5f5",      // main text (soft white)

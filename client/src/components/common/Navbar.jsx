@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth.jsx";
 import logo from "@/assets/icon.png";
+import DefaultButton from "@/components/common/DefaultButton";
 
 export default function Navbar() {
   const { logout, user } = useAuth();
@@ -23,6 +24,10 @@ export default function Navbar() {
     await logout();
     console.log("Logged out");
     navigate("/");
+  };
+
+  const handleGetStarted = () => {
+    navigate("/auth", { state: { showSignUp: true } });
   };
 
   return (
@@ -64,9 +69,17 @@ export default function Navbar() {
               Logout
             </button>
           ) : (
-            <NavLink className={linkClass} to="/auth">
-              Login
-            </NavLink>
+            <div>
+              <NavLink className={linkClass} to="/auth">
+                Sign In
+              </NavLink>
+              <DefaultButton
+                onClick={handleGetStarted}
+                className="bg-[var(--home-accent)] text-[var(--home-accentText)] border border-[var(--home-border)] transition-all duration-150 hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg"
+              >
+                Get Started
+              </DefaultButton>
+            </div>
           )}
         </div>
       </div>

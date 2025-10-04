@@ -2,11 +2,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { getDifficultyColor } from "@/constants/difficultyColor";
-import { useHomeTheme } from "@/context/HomeThemeContext";
+import { formatContent, formatStrings } from "@/utils/formatBacktick";
 
 export default function QuestionDisplay({ selectedProblem }) {
-  const { theme } = useHomeTheme();
-
   const formatWithCommaSpace = (value) => {
     if (Array.isArray(value)) {
       return `[ ${value
@@ -47,8 +45,8 @@ export default function QuestionDisplay({ selectedProblem }) {
       <ScrollArea className="flex-1 min-h-0">
         <div>
           {/* Description */}
-          <p className="xl:text-sm 2xl:text-lg text-[var(--home-muted)] 2xl:my-5 2 xl:my-2">
-            {selectedProblem.description}
+          <p className="text-sm 2xl:text-lg text-[var(--home-muted)] 2xl:my-5 2 xl:my-2 leading-relaxed">
+            {formatContent(selectedProblem.description)}
           </p>
 
           {/* Examples */}
@@ -68,9 +66,10 @@ export default function QuestionDisplay({ selectedProblem }) {
                     </p>
                     <div>
                       {Object.entries(ex.input).map(([key, value]) => (
-                        <p key={key}>
-                          {key}: {formatWithCommaSpace(value)}
-                        </p>
+                        <div className="flex flex-row gap-2">
+                          <p key={key}>{formatStrings(key)}:</p>
+                          <p>{formatWithCommaSpace(value)}</p>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -78,9 +77,9 @@ export default function QuestionDisplay({ selectedProblem }) {
                   <p>
                     <strong>Output:</strong> {formatWithCommaSpace(ex.output)}
                   </p>
-                  <p className="text-[var(--home-accent)]">
+                  <p className="text-[var(--home-muted)]">
                     <strong>Explanation: </strong>
-                    {ex.explanation}
+                    {formatContent(ex.explanation)}
                   </p>
                 </Card>
               ))}

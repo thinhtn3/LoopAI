@@ -165,6 +165,10 @@ body {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Hide native scrollbars for elements flagged with .no-scrollbar */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

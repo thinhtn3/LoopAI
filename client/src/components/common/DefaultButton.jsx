@@ -29,7 +29,6 @@ export default function DefaultButton({
       asChild={asChild}
       size={size}
       className={cn(
-        // "transition-colors duration-150",
         loading && "opacity-70 cursor-not-allowed",
         disabled && "opacity-50 cursor-not-allowed",
         className

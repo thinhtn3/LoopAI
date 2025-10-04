@@ -9,10 +9,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Plus } from "lucide-react";
 import axios from "axios";
 import DefaultButton from "@/components/common/DefaultButton.jsx";
 
-export default function ArchiveAlertDialog({
+export default function NewChatAlertDialog({
   setMessages,
   problemSlug,
 }) {
@@ -40,21 +41,21 @@ export default function ArchiveAlertDialog({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <DefaultButton className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)] xl:text-sm 2xl:text-lg">
-          New Chat
+        <DefaultButton className="h-[80%] rounded-lg text-[var(--home-text)] hover:bg-[var(--home-bg)] xl:text-sm 2xl:text-lg cursor-pointer">
+          <Plus className="2xl:size-6 lg:size-3"/>
         </DefaultButton>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle className="text-[var(--home-text)]">Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. Your conversation will be archived and
             a new chat will be created.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleArchiveConversation}>
+          <AlertDialogCancel className="bg-[var(--home-bg)] text-[var(--home-text)] hover:text-[var(--home-text)] hover:bg-[var(--home-bgHover)] border-0">Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleArchiveConversation} className="bg-[var(--home-accent)] text-[var(--home-accentText)] hover:bg-[var(--home-accentHover)] border-0">
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

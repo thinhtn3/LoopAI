@@ -6,20 +6,25 @@ import Navbar from "@/components/common/Navbar.jsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth.jsx";
-
+import { useLocation } from "react-router-dom";
 
 export default function Auth() {
-  const [showSignUp, setShowSignUp] = useState(false);
+  const location = useLocation();
+  const [showSignUp, setShowSignUp] = useState(() => location.state?.showSignUp ?? false);
   const navigate = useNavigate();
   const { user } = useAuth();
 
   useEffect(() => {
-    //If user is authenticated, redirect to problems
     if (user) {
       navigate("/problems");
     }
   }, [user]);
 
+  useEffect(() => {
+    if (typeof location.state?.showSignUp === "boolean") {
+      setShowSignUp(location.state.showSignUp);
+    }
+  }, [location.state]);
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-between bg-[var(--home-bg)]">
       <Navbar />
